@@ -7,1030 +7,523 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root {
-  --green:        #306C45;
-  --green-mid:    #577F60;
-  --green-light:  #9FB19F;
-  --green-pale:   #D9ECDB;
-  --blue:         #2980BE;
-  --blue-mid:     #5D92C9;
-  --blue-light:   #A8C0E1;
-  --blue-pale:    #D0DBEE;
-  --purple:       #805CA5;
-  --purple-mid:   #9175B4;
-  --purple-light: #C0B0D6;
-  --purple-pale:  #DBD4E9;
-  --bg:           #f5f6f8;
-  --surface:      #ffffff;
-  --surface2:     #f0f2f5;
-  --border:       #e2e6ec;
-  --text:         #1a2232;
-  --muted:        #5a6478;
-  --hint:         #9aa3b2;
-  --red:          #c0392b;
-  --red-bg:       #fdf0ee;
-  --red-border:   #f5c6c2;
-  --amber:        #b7770d;
-  --amber-bg:     #fdf6e3;
-  --amber-border: #f5dfa0;
-  --radius:    10px;
-  --radius-lg: 16px;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'Cairo', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-}
-
-/* TOP BAR */
-.topbar {
-  background: var(--green);
-  padding: 0 32px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky; top: 0; z-index: 100;
-}
-.logo-text { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
-.logo-text span { color: var(--green-pale); }
-.logo-tagline { font-size: 10px; color: rgba(255,255,255,0.6); font-weight: 300; margin-top: -2px; }
-.topbar-right { display: flex; align-items: center; gap: 10px; }
-.topbar-badge {
-  background: rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.9);
-  font-size: 11px; padding: 4px 14px;
-  border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
-}
-
-/* NAV TABS */
-.nav-bar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 32px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  overflow-x: auto;
-}
-.nav-tab {
-  padding: 14px 20px;
-  font-size: 13px; font-weight: 600;
-  color: var(--muted);
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  white-space: nowrap;
-  transition: all 0.2s;
-  background: none; border-top: none; border-left: none; border-right: none;
-  font-family: 'Cairo', sans-serif;
-}
-.nav-tab:hover { color: var(--green); }
-.nav-tab.active { color: var(--green); border-bottom-color: var(--green); }
-.nav-breadcrumb {
-  font-size: 11px; color: var(--hint); padding: 0 0 0 16px;
-  margin-right: auto; border-right: 1px solid var(--border);
-  padding-right: 16px; display: flex; align-items: center; gap: 6px;
-}
-.bc-sep { color: var(--border); }
-
-/* FILTERS BAR */
-.filters-bar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 32px;
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-}
-.filter-group { display: flex; align-items: center; gap: 6px; }
-.filter-label { font-size: 10px; font-weight: 700; color: var(--hint); letter-spacing: 0.08em; }
-.filter-select {
-  font-family: 'Cairo', sans-serif;
-  font-size: 11px; color: var(--text);
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
-  outline: none;
-  cursor: pointer;
-}
-.filter-select:focus { border-color: var(--green); }
-.filter-sep { width: 1px; height: 20px; background: var(--border); }
-.filter-clear {
-  font-size: 10px; font-weight: 600; color: var(--muted);
-  background: none; border: 1px solid var(--border); border-radius: 6px;
-  padding: 4px 10px; cursor: pointer; font-family: 'Cairo', sans-serif;
-}
-
-/* HEADER STRIP */
-.header-strip {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 14px 32px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.page-title { font-size: 17px; font-weight: 700; color: var(--text); }
-.page-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.header-pills { display: flex; gap: 8px; }
-.pill { font-size: 11px; font-weight: 600; padding: 5px 14px; border-radius: 20px; border: 1px solid; }
-.pill-green  { background: var(--green-pale);  color: var(--green);  border-color: #b2d4bc; }
-.pill-blue   { background: var(--blue-pale);   color: var(--blue);   border-color: #b2cfe8; }
-.pill-purple { background: var(--purple-pale); color: var(--purple); border-color: #c4b4d8; }
-.pill-red    { background: var(--red-bg);      color: var(--red);    border-color: var(--red-border); }
-.pill-amber  { background: var(--amber-bg);    color: var(--amber);  border-color: var(--amber-border); }
-
-/* CONTENT */
-.content { padding: 24px 32px; }
-.section { margin-bottom: 28px; }
-.section-label {
-  font-size: 10px; font-weight: 700; color: var(--hint);
-  letter-spacing: 0.12em; text-transform: uppercase;
-  margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
-}
-.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-/* CARD */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px 24px;
-}
-.card-header {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 18px; padding-bottom: 14px;
-  border-bottom: 1px solid var(--border);
-}
-.card-icon {
-  width: 32px; height: 32px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px; font-weight: 700; flex-shrink: 0;
-}
-.ci-green  { background: var(--green-pale);  color: var(--green);  }
-.ci-blue   { background: var(--blue-pale);   color: var(--blue);   }
-.ci-purple { background: var(--purple-pale); color: var(--purple); }
-.ci-red    { background: var(--red-bg);      color: var(--red);    }
-.ci-amber  { background: var(--amber-bg);    color: var(--amber);  }
-.card-title { font-size: 14px; font-weight: 700; color: var(--text); }
-.card-sub   { font-size: 11px; color: var(--muted); margin-top: 1px; }
-
-/* ACCENT BORDERS */
-.accent-green  { border-right: 3px solid var(--green);  }
-.accent-blue   { border-right: 3px solid var(--blue);   }
-.accent-purple { border-right: 3px solid var(--purple); }
-.accent-red    { border-right: 3px solid var(--red);    }
-.accent-amber  { border-right: 3px solid var(--amber);  }
-
-/* KPI GRID */
-.kpi-grid { display: grid; gap: 12px; }
-.kpi-grid-8 { grid-template-columns: repeat(8, 1fr); }
-.kpi-grid-4 { grid-template-columns: repeat(4, 1fr); }
-.kpi-grid-3 { grid-template-columns: repeat(3, 1fr); }
-.kpi-grid-6 { grid-template-columns: repeat(6, 1fr); }
-
-.kpi-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 16px 18px;
-  display: flex; flex-direction: column;
-}
-.kpi-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 8px; }
-.kpi-val   { font-size: 30px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
-.kpi-sub   { font-size: 10px; color: var(--hint); margin-top: 6px; }
-.kpi-badge { margin-top: 8px; align-self: flex-start; }
-
-/* COLORS */
-.v-green  { color: var(--green);  }
-.v-blue   { color: var(--blue);   }
-.v-purple { color: var(--purple); }
-.v-red    { color: var(--red);    }
-.v-amber  { color: var(--amber);  }
-.v-muted  { color: var(--muted);  }
-.v-text   { color: var(--text);   }
-
-/* BADGE */
-.badge { font-size: 10px; font-weight: 700; padding: 3px 11px; border-radius: 20px; border: 1px solid; white-space: nowrap; display: inline-block; }
-.badge-hh     { background: var(--red-bg);    color: var(--red);    border-color: var(--red-border); }
-.badge-mh     { background: var(--amber-bg);  color: var(--amber);  border-color: var(--amber-border); }
-.badge-green  { background: var(--green-pale); color: var(--green); border-color: #b2d4bc; }
-.badge-blue   { background: var(--blue-pale);  color: var(--blue);  border-color: #b2cfe8; }
-.badge-purple { background: var(--purple-pale);color: var(--purple);border-color: #c4b4d8; }
-
-/* GRIDS */
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-.grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
-.grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
-.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
-
-/* PROGRESS */
-.progress-wrap { background: var(--surface2); border-radius: 6px; height: 8px; overflow: hidden; border: 1px solid var(--border); }
-.progress-fill { height: 100%; border-radius: 6px; }
-.progress-green  { background: linear-gradient(90deg, var(--green), var(--green-mid)); }
-.progress-amber  { background: var(--amber); }
-.progress-red    { background: var(--red); }
-.progress-blue   { background: var(--blue); }
-.progress-purple { background: var(--purple); }
-
-/* TABLE */
-.tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
-.tbl th {
-  background: var(--surface2);
-  padding: 10px 14px;
-  text-align: right;
-  font-size: 10px; font-weight: 700; color: var(--muted);
-  letter-spacing: 0.06em;
-  border-bottom: 1px solid var(--border);
-}
-.tbl td {
-  padding: 11px 14px;
-  border-bottom: 1px solid var(--border);
-  color: var(--text);
-  vertical-align: middle;
-}
-.tbl tr:last-child td { border-bottom: none; }
-.tbl tr:hover td { background: var(--surface2); }
-.tbl-link { color: var(--blue); font-weight: 600; cursor: pointer; text-decoration: none; }
-.tbl-link:hover { text-decoration: underline; }
-
-/* CHARTS */
-.chart-wrap { position: relative; width: 100%; }
-
-/* LEGEND */
-.legend { display: flex; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
-.legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
-.legend-dot  { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
-
-/* PIE AREA */
-.pie-area { display: flex; align-items: center; gap: 20px; }
-.pie-wrap  { position: relative; flex-shrink: 0; }
-.pie-legend { flex: 1; }
-.pie-legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
-.pie-legend-row:last-child { margin-bottom: 0; }
-.pie-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.pie-lbl { font-size: 12px; color: var(--muted); flex: 1; }
-.pie-val { font-size: 14px; font-weight: 700; }
-
-/* PILLAR ROW */
-.pillar-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
-.pillar-row:last-child { border-bottom: none; padding-bottom: 0; }
-.pillar-row:first-child { padding-top: 0; }
-.pillar-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; font-weight: 700; }
-.pillar-info { flex: 1; min-width: 0; }
-.pillar-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-.pillar-bar-wrap { background: var(--surface2); border-radius: 4px; height: 6px; overflow: hidden; border: 1px solid var(--border); }
-.pillar-bar-fill { height: 100%; border-radius: 4px; }
-.pillar-pct { font-size: 13px; font-weight: 700; min-width: 38px; text-align: left; }
-
-/* RISK ROW */
-.risk-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); gap: 12px; }
-.risk-row:last-child { border-bottom: none; padding-bottom: 0; }
-.risk-row:first-child { padding-top: 0; }
-.risk-name { font-size: 12px; color: var(--text); flex: 1; }
-.risk-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
-
-/* TOTALS ROW */
-.totals-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
-.total-card { background: var(--surface2); border-radius: var(--radius); padding: 12px; border: 1px solid var(--border); }
-.total-lbl  { font-size: 11px; color: var(--muted); }
-.total-val  { font-size: 20px; font-weight: 700; color: var(--text); margin-top: 2px; }
-
-/* STAT ROW */
-.stat-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
-.stat-row:last-child { border-bottom: none; }
-.stat-row:first-child { padding-top: 0; }
-.stat-label { font-size: 12px; color: var(--text); flex: 1; }
-.stat-val   { font-size: 14px; font-weight: 700; }
-.stat-bar-col { width: 100px; }
-
-/* DRIVER ROW */
-.driver-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-.driver-row:last-child { border-bottom: none; padding-bottom: 0; }
-.driver-row:first-child { padding-top: 0; }
-.driver-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; border: 1px solid; }
-.di-red    { background: var(--red-bg);   color: var(--red);   border-color: var(--red-border); }
-.di-amber  { background: var(--amber-bg); color: var(--amber); border-color: var(--amber-border); }
-.di-green  { background: var(--green-pale); color: var(--green); border-color: #b2d4bc; }
-.di-blue   { background: var(--blue-pale);  color: var(--blue);  border-color: #b2cfe8; }
-.driver-title { font-size: 12px; color: var(--text); line-height: 1.5; }
-.driver-sub   { font-size: 11px; color: var(--muted); margin-top: 3px; }
-
-/* TASK ROW */
-.task-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-.task-row:last-child { border-bottom: none; }
-.task-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.task-name { font-size: 12px; color: var(--text); flex: 1; }
-.task-date { font-size: 11px; color: var(--muted); }
-
-/* MILESTONE */
-.milestone-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-.milestone-item:last-child { border-bottom: none; }
-.ms-icon { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; border: 2px solid; }
-.ms-done  { background: var(--green-pale); color: var(--green); border-color: #b2d4bc; }
-.ms-pend  { background: var(--amber-bg);  color: var(--amber); border-color: var(--amber-border); }
-.ms-late  { background: var(--red-bg);    color: var(--red);   border-color: var(--red-border); }
-.ms-title { font-size: 12px; font-weight: 600; color: var(--text); }
-.ms-date  { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-/* PORTFOLIO CARD in table */
-.port-name { font-size: 12px; font-weight: 700; color: var(--text); }
-.port-sub  { font-size: 10px; color: var(--muted); margin-top: 2px; }
-
-/* FOOTER */
-.page-footer {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  padding: 14px 32px;
-  display: flex; align-items: center; justify-content: space-between;
-  margin-top: 8px;
-}
-.footer-logo { font-size: 14px; font-weight: 700; color: var(--green); }
-.footer-logo span { color: var(--purple); }
-.footer-text { font-size: 11px; color: var(--hint); }
-
-/* SUMMARY MINI */
-.summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
-.summary-cell { text-align: center; padding: 10px 6px; border-radius: var(--radius); border: 1px solid; }
-.sc-green { background: var(--green-pale); border-color: #b2d4bc; }
-.sc-amber { background: var(--amber-bg); border-color: var(--amber-border); }
-.sc-red   { background: var(--red-bg); border-color: var(--red-border); }
-.sc-blue  { background: var(--blue-pale); border-color: #b2cfe8; }
-.sc-val { font-size: 22px; font-weight: 700; }
-.sc-lbl { font-size: 10px; margin-top: 2px; }
-
-/* HIDDEN */
-.page-section { display: none; }
-.page-section.active { display: block; }
-
-/* RESPONSIVE */
-@media (max-width: 1100px) {
-  .kpi-grid-8 { grid-template-columns: repeat(4, 1fr); }
-}
-@media (max-width: 800px) {
-  .content { padding: 16px; }
-  .topbar, .filters-bar, .header-strip, .page-footer { padding-left: 16px; padding-right: 16px; }
-  .nav-bar { padding: 0 16px; }
-  .kpi-grid-8, .kpi-grid-6 { grid-template-columns: repeat(2, 1fr); }
-  .kpi-grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .kpi-grid-3 { grid-template-columns: repeat(2, 1fr); }
-  .grid2, .grid3, .grid4, .grid-1-2, .grid-2-1 { grid-template-columns: 1fr; }
-  .header-pills { display: none; }
-  .filters-bar { gap: 6px; }
+:root{--green:#306C45;--green-mid:#577F60;--green-light:#9FB19F;--green-pale:#D9ECDB;--blue:#2980BE;--blue-mid:#5D92C9;--blue-light:#A8C0E1;--blue-pale:#D0DBEE;--purple:#805CA5;--purple-mid:#9175B4;--purple-light:#C0B0D6;--purple-pale:#DBD4E9;--bg:#f5f6f8;--surface:#ffffff;--surface2:#f0f2f5;--border:#e2e6ec;--text:#1a2232;--muted:#5a6478;--hint:#9aa3b2;--red:#c0392b;--red-bg:#fdf0ee;--red-border:#f5c6c2;--amber:#b7770d;--amber-bg:#fdf6e3;--amber-border:#f5dfa0;--radius:10px;--radius-lg:16px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.topbar{background:var(--green);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.logo-text{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.5px;}
+.logo-text span{color:var(--green-pale);}
+.logo-tagline{font-size:10px;color:rgba(255,255,255,0.6);font-weight:300;margin-top:-2px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.topbar-badge{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);font-size:11px;padding:4px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);}
+.nav-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;display:flex;align-items:center;gap:4px;overflow-x:auto;position:sticky;top:56px;z-index:190;}
+.nav-tab{padding:14px 20px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all 0.2s;background:none;border-top:none;border-left:none;border-right:none;font-family:'Cairo',sans-serif;}
+.nav-tab:hover{color:var(--green);}
+.nav-tab.active{color:var(--green);border-bottom-color:var(--green);}
+.nav-breadcrumb{font-size:11px;color:var(--hint);padding:0 16px;margin-right:auto;border-right:1px solid var(--border);display:flex;align-items:center;}
+.filters-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;}
+.filters-primary{display:flex;align-items:center;gap:6px;height:50px;}
+.filter-chip{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0 12px;height:32px;transition:border-color 0.15s;}
+.filter-chip-label{font-size:10px;font-weight:700;color:var(--hint);letter-spacing:0.04em;white-space:nowrap;}
+.filter-chip-select{font-family:'Cairo',sans-serif;font-size:11px;font-weight:600;color:var(--text);border:none;background:transparent;outline:none;cursor:pointer;padding:0;min-width:52px;-webkit-appearance:none;appearance:none;}
+.filter-divider{width:1px;height:18px;background:var(--border);flex-shrink:0;margin:0 2px;}
+.filter-adv-btn{display:flex;align-items:center;gap:6px;font-family:'Cairo',sans-serif;font-size:11px;font-weight:600;color:var(--muted);background:none;border:1px solid var(--border);border-radius:8px;padding:0 14px;height:32px;cursor:pointer;white-space:nowrap;transition:all 0.15s;margin-right:auto;}
+.filter-adv-btn:hover,.filter-adv-btn.open{border-color:var(--purple);color:var(--purple);background:var(--purple-pale);}
+.adv-count{background:var(--purple);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;display:none;}
+.adv-count.show{display:inline-block;}
+.filter-reset{font-family:'Cairo',sans-serif;font-size:10px;font-weight:600;color:var(--hint);background:none;border:none;cursor:pointer;padding:0 6px;white-space:nowrap;}
+.filter-reset:hover{color:var(--red);}
+.filters-advanced{background:#f8f9fc;border-bottom:1px solid var(--border);padding:14px 32px;display:none;gap:14px;flex-wrap:wrap;align-items:flex-end;}
+.filters-advanced.open{display:flex;}
+.adv-group{display:flex;flex-direction:column;gap:4px;}
+.adv-label{font-size:9px;font-weight:700;color:var(--hint);letter-spacing:0.08em;text-transform:uppercase;}
+.adv-select{font-family:'Cairo',sans-serif;font-size:11px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;outline:none;cursor:pointer;min-width:130px;}
+.adv-select:focus{border-color:var(--purple);}
+.adv-apply{font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;color:#fff;background:var(--green);border:none;border-radius:8px;padding:7px 18px;cursor:pointer;}
+.adv-apply:hover{background:var(--green-mid);}
+.header-strip{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;}
+.page-title{font-size:17px;font-weight:700;color:var(--text);}
+.page-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.header-pills{display:flex;gap:8px;}
+.pill{font-size:11px;font-weight:600;padding:5px 14px;border-radius:20px;border:1px solid;}
+.pill-green{background:var(--green-pale);color:var(--green);border-color:#b2d4bc;}
+.pill-blue{background:var(--blue-pale);color:var(--blue);border-color:#b2cfe8;}
+.pill-purple{background:var(--purple-pale);color:var(--purple);border-color:#c4b4d8;}
+.pill-amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border);}
+.content{padding:24px 32px;}
+.section{margin-bottom:28px;}
+.section-label{font-size:10px;font-weight:700;color:var(--hint);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.card-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;}
+.ci-green{background:var(--green-pale);color:var(--green);}
+.ci-blue{background:var(--blue-pale);color:var(--blue);}
+.ci-purple{background:var(--purple-pale);color:var(--purple);}
+.ci-red{background:var(--red-bg);color:var(--red);}
+.ci-amber{background:var(--amber-bg);color:var(--amber);}
+.card-title{font-size:14px;font-weight:700;color:var(--text);}
+.card-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.accent-green{border-right:3px solid var(--green);}
+.accent-blue{border-right:3px solid var(--blue);}
+.accent-purple{border-right:3px solid var(--purple);}
+.accent-red{border-right:3px solid var(--red);}
+.accent-amber{border-right:3px solid var(--amber);}
+.kpi-grid{display:grid;gap:12px;}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;display:flex;flex-direction:column;}
+.kpi-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.06em;margin-bottom:8px;}
+.kpi-val{font-size:30px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;}
+.kpi-sub{font-size:10px;color:var(--hint);margin-top:6px;}
+.v-green{color:var(--green);}.v-blue{color:var(--blue);}.v-purple{color:var(--purple);}.v-red{color:var(--red);}.v-amber{color:var(--amber);}.v-muted{color:var(--muted);}
+.badge{font-size:10px;font-weight:700;padding:3px 11px;border-radius:20px;border:1px solid;white-space:nowrap;display:inline-block;}
+.badge-hh{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
+.badge-mh{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border);}
+.badge-green{background:var(--green-pale);color:var(--green);border-color:#b2d4bc;}
+.badge-blue{background:var(--blue-pale);color:var(--blue);border-color:#b2cfe8;}
+.badge-purple{background:var(--purple-pale);color:var(--purple);border-color:#c4b4d8;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;}
+.grid-1-2{display:grid;grid-template-columns:1fr 2fr;gap:16px;}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:16px;}
+.progress-wrap{background:var(--surface2);border-radius:6px;height:8px;overflow:hidden;border:1px solid var(--border);}
+.progress-fill{height:100%;border-radius:6px;}
+.pg-green{background:linear-gradient(90deg,var(--green),var(--green-mid));}
+.pg-amber{background:var(--amber);}
+.pg-red{background:var(--red);}
+.pg-blue{background:var(--blue);}
+.tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.tbl th{background:var(--surface2);padding:10px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.06em;border-bottom:1px solid var(--border);}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--surface2);}
+.tbl-link{color:var(--blue);font-weight:600;cursor:pointer;}
+.tbl-link:hover{text-decoration:underline;}
+.chart-wrap{position:relative;width:100%;}
+.legend{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);}
+.legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+.pie-area{display:flex;align-items:center;gap:20px;}
+.pie-wrap{position:relative;flex-shrink:0;}
+.pie-legend{flex:1;}
+.pie-legend-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.pie-legend-row:last-child{margin-bottom:0;}
+.pie-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.pie-lbl{font-size:12px;color:var(--muted);flex:1;}
+.pie-val{font-size:14px;font-weight:700;}
+.pillar-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.pillar-row:last-child{border-bottom:none;padding-bottom:0;}
+.pillar-row:first-child{padding-top:0;}
+.pillar-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;font-weight:700;}
+.pillar-info{flex:1;min-width:0;}
+.pillar-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.pillar-bar-wrap{background:var(--surface2);border-radius:4px;height:6px;overflow:hidden;border:1px solid var(--border);}
+.pillar-bar-fill{height:100%;border-radius:4px;}
+.pillar-pct{font-size:13px;font-weight:700;min-width:38px;text-align:left;}
+.risk-row{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);gap:12px;}
+.risk-row:last-child{border-bottom:none;padding-bottom:0;}
+.risk-row:first-child{padding-top:0;}
+.risk-info{flex:1;}
+.risk-name{font-size:12px;color:var(--text);font-weight:600;}
+.risk-meta{font-size:10px;color:var(--muted);margin-top:2px;}
+.driver-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.driver-row:last-child{border-bottom:none;padding-bottom:0;}
+.driver-row:first-child{padding-top:0;}
+.driver-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;border:1px solid;}
+.di-red{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
+.di-amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border);}
+.di-blue{background:var(--blue-pale);color:var(--blue);border-color:#b2cfe8;}
+.driver-title{font-size:12px;color:var(--text);line-height:1.5;}
+.driver-sub{font-size:10px;color:var(--muted);margin-top:3px;}
+.stat-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);}
+.stat-row:last-child{border-bottom:none;}
+.stat-row:first-child{padding-top:0;}
+.stat-label{font-size:12px;color:var(--text);flex:1;}
+.stat-val{font-size:13px;font-weight:700;}
+.milestone-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.milestone-item:last-child{border-bottom:none;}
+.ms-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:2px solid;}
+.ms-done{background:var(--green-pale);color:var(--green);border-color:#b2d4bc;}
+.ms-pend{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border);}
+.ms-late{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
+.ms-title{font-size:12px;font-weight:600;color:var(--text);}
+.ms-date{font-size:10px;color:var(--muted);margin-top:2px;}
+.task-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.task-row:last-child{border-bottom:none;}
+.task-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.task-name{font-size:12px;color:var(--text);flex:1;}
+.task-date{font-size:10px;color:var(--muted);}
+.totals-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+.total-card{background:var(--surface2);border-radius:var(--radius);padding:12px;border:1px solid var(--border);}
+.total-lbl{font-size:11px;color:var(--muted);}
+.total-val{font-size:20px;font-weight:700;color:var(--text);margin-top:2px;}
+.esc-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.esc-row:last-child{border-bottom:none;padding-bottom:0;}
+.esc-row:first-child{padding-top:0;}
+.esc-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.esc-title{font-size:12px;font-weight:600;color:var(--text);}
+.esc-meta{font-size:10px;color:var(--muted);margin-top:2px;}
+.esc-aging{font-size:11px;font-weight:700;color:var(--red);white-space:nowrap;}
+.mini-stat-grid{display:grid;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.ms4{grid-template-columns:repeat(4,1fr);}
+.ms3{grid-template-columns:repeat(3,1fr);}
+.ms-cell{text-align:center;padding:10px 6px;border-radius:var(--radius);border:1px solid;}
+.msc-green{background:var(--green-pale);border-color:#b2d4bc;}
+.msc-amber{background:var(--amber-bg);border-color:var(--amber-border);}
+.msc-red{background:var(--red-bg);border-color:var(--red-border);}
+.msc-blue{background:var(--blue-pale);border-color:#b2cfe8;}
+.msc-purple{background:var(--purple-pale);border-color:#c4b4d8;}
+.ms-cell-val{font-size:20px;font-weight:700;}
+.ms-cell-lbl{font-size:10px;margin-top:2px;}
+.page-section{display:none;}
+.page-section.active{display:block;}
+.page-footer{background:var(--surface);border-top:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+.footer-logo{font-size:14px;font-weight:700;color:var(--green);}
+.footer-logo span{color:var(--purple);}
+.footer-text{font-size:11px;color:var(--hint);}
+@media(max-width:1200px){.kpi-grid[style*="repeat(8"]{grid-template-columns:repeat(4,1fr)!important;}.kpi-grid[style*="repeat(7"]{grid-template-columns:repeat(4,1fr)!important;}}
+@media(max-width:800px){
+  .content,.topbar,.filters-bar,.header-strip,.page-footer,.nav-bar{padding-left:16px;padding-right:16px;}
+  .content{padding-top:16px;padding-bottom:16px;}
+  .grid2,.grid3,.grid4,.grid-1-2,.grid-2-1{grid-template-columns:1fr;}
+  .header-pills{display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- ======================== TOP BAR ======================== -->
 <div class="topbar">
-  <div>
-    <div class="logo-text">Ne<span>X</span>era</div>
-    <div class="logo-tagline">The Next Era of Empowerment</div>
-  </div>
-  <div class="topbar-right">
-    <span class="topbar-badge" id="topbar-label">لوحة مكتب إدارة المشاريع — PMO</span>
-  </div>
+  <div><div class="logo-text">Ne<span>X</span>era</div><div class="logo-tagline">The Next Era of Empowerment</div></div>
+  <div class="topbar-right"><span class="topbar-badge" id="topbar-label">لوحة مكتب إدارة المشاريع — PMO</span></div>
 </div>
 
-<!-- ======================== NAV TABS ======================== -->
 <div class="nav-bar">
-  <div class="nav-breadcrumb" id="breadcrumb">
-    <span>الرئيسية</span>
-  </div>
+  <div class="nav-breadcrumb" id="breadcrumb">الرئيسية</div>
   <button class="nav-tab active" onclick="showPage('pmo')">📊 PMO</button>
   <button class="nav-tab" onclick="showPage('portfolio')">🗂 المحفظة</button>
   <button class="nav-tab" onclick="showPage('program')">📁 البرنامج</button>
   <button class="nav-tab" onclick="showPage('project')">📌 المشروع</button>
 </div>
 
-<!-- ======================== FILTERS ======================== -->
 <div class="filters-bar">
-  <div class="filter-group">
-    <span class="filter-label">السنة</span>
-    <select class="filter-select"><option>2026</option><option>2025</option><option>2024</option></select>
+  <div class="filters-primary">
+    <div class="filter-chip">
+      <span class="filter-chip-label">السنة</span>
+      <select class="filter-chip-select"><option>2026</option><option>2025</option><option>2024</option></select>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-chip">
+      <span class="filter-chip-label">الربع</span>
+      <select class="filter-chip-select"><option>الكل</option><option>الأول</option><option>الثاني</option><option>الثالث</option><option>الرابع</option></select>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-chip">
+      <span class="filter-chip-label">الشهر</span>
+      <select class="filter-chip-select"><option>الكل</option><option>يناير</option><option>فبراير</option><option>مارس</option><option>أبريل</option><option>مايو</option></select>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-chip">
+      <span class="filter-chip-label">الجهة</span>
+      <select class="filter-chip-select"><option>الكل</option><option>وزارة المالية</option><option>وزارة الصحة</option><option>التحول الرقمي</option><option>البنية التحتية</option></select>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-chip">
+      <span class="filter-chip-label">المحفظة</span>
+      <select class="filter-chip-select"><option>الكل</option><option>التحول الرقمي</option><option>البنية التحتية</option><option>الصحة الرقمية</option><option>التعليم</option></select>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-chip">
+      <span class="filter-chip-label">البرنامج</span>
+      <select class="filter-chip-select"><option>الكل</option><option>الحكومة الإلكترونية</option><option>البيانات الوطنية</option><option>الأمن السيبراني</option></select>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-chip">
+      <span class="filter-chip-label">المشروع</span>
+      <select class="filter-chip-select"><option>الكل</option><option>بوابة الخدمات</option><option>منصة البيانات</option><option>نظام الحماية</option></select>
+    </div>
+    <button class="filter-adv-btn" id="advBtn" onclick="toggleAdv()">
+      <span>⚙ فلاتر متقدمة</span>
+      <span class="adv-count" id="advCount">0</span>
+    </button>
+    <button class="filter-reset" onclick="resetFilters()">↺ مسح</button>
   </div>
-  <div class="filter-sep"></div>
-  <div class="filter-group">
-    <span class="filter-label">الربع</span>
-    <select class="filter-select"><option>الكل</option><option>الربع الأول</option><option>الربع الثاني</option><option>الربع الثالث</option><option>الربع الرابع</option></select>
+</div>
+<div class="filters-advanced" id="advFilters">
+  <div class="adv-group">
+    <span class="adv-label">الحالة</span>
+    <select class="adv-select" onchange="updateAdvCount()"><option>الكل</option><option>على المسار</option><option>متأخر</option><option>متعثر</option><option>مكتمل</option></select>
   </div>
-  <div class="filter-sep"></div>
-  <div class="filter-group">
-    <span class="filter-label">الشهر</span>
-    <select class="filter-select"><option>الكل</option><option>يناير</option><option>فبراير</option><option>مارس</option><option>أبريل</option><option>مايو</option></select>
+  <div class="adv-group">
+    <span class="adv-label">المالك</span>
+    <select class="adv-select" onchange="updateAdvCount()"><option>الكل</option><option>أ. محمد علي</option><option>أ. سارة الشمري</option><option>أ. خالد العتيبي</option></select>
   </div>
-  <div class="filter-sep"></div>
-  <div class="filter-group">
-    <span class="filter-label">الجهة</span>
-    <select class="filter-select"><option>الكل</option><option>وزارة المالية</option><option>وزارة الصحة</option><option>التحول الرقمي</option><option>البنية التحتية</option></select>
+  <div class="adv-group">
+    <span class="adv-label">مستوى الخطورة</span>
+    <select class="adv-select" onchange="updateAdvCount()"><option>الكل</option><option>عالي</option><option>متوسط</option><option>منخفض</option></select>
   </div>
-  <div class="filter-sep"></div>
-  <div class="filter-group">
-    <span class="filter-label">المحفظة</span>
-    <select class="filter-select"><option>الكل</option><option>محفظة التحول الرقمي</option><option>محفظة البنية التحتية</option><option>محفظة الصحة</option></select>
+  <div class="adv-group">
+    <span class="adv-label">نوع المبادرة</span>
+    <select class="adv-select" onchange="updateAdvCount()"><option>الكل</option><option>تشغيلي</option><option>تطويري</option><option>استراتيجي</option></select>
   </div>
-  <div class="filter-sep"></div>
-  <div class="filter-group">
-    <span class="filter-label">الحالة</span>
-    <select class="filter-select"><option>الكل</option><option>على المسار</option><option>متأخر</option><option>متعثر</option><option>مكتمل</option></select>
+  <div class="adv-group">
+    <span class="adv-label">الحالة الزمنية</span>
+    <select class="adv-select" onchange="updateAdvCount()"><option>الكل</option><option>على المسار</option><option>متأخر</option><option>مكتمل</option></select>
   </div>
-  <div class="filter-sep"></div>
-  <div class="filter-group">
-    <span class="filter-label">مستوى المخاطرة</span>
-    <select class="filter-select"><option>الكل</option><option>عالي</option><option>متوسط</option><option>منخفض</option></select>
-  </div>
-  <div class="filter-sep"></div>
-  <div class="filter-group">
-    <span class="filter-label">الحالة الزمنية</span>
-    <select class="filter-select"><option>الكل</option><option>على المسار</option><option>متأخر</option><option>مكتمل</option></select>
-  </div>
-  <button class="filter-clear">↺ إعادة ضبط</button>
+  <button class="adv-apply" onclick="toggleAdv()">تطبيق</button>
 </div>
 
-<!-- ================================================================
-     PAGE: PMO
-================================================================ -->
+<!-- ==================== PMO ==================== -->
 <div id="page-pmo" class="page-section active">
-
   <div class="header-strip">
-    <div>
-      <div class="page-title">لوحة مكتب إدارة المشاريع المؤسسي — PMO Dashboard</div>
-      <div class="page-sub">نظرة مؤسسية شاملة على جميع المحافظ والبرامج والمشاريع | بيانات أبريل 2026</div>
-    </div>
-    <div class="header-pills">
-      <span class="pill pill-green">5 محافظ نشطة</span>
-      <span class="pill pill-blue">18 برنامجاً</span>
-      <span class="pill pill-amber">74 مشروعاً</span>
-    </div>
+    <div><div class="page-title">لوحة مكتب إدارة المشاريع المؤسسي — PMO Dashboard</div><div class="page-sub">نظرة رقابية مؤسسية شاملة على جميع المحافظ والبرامج والمشاريع | أبريل 2026</div></div>
+    <div class="header-pills"><span class="pill pill-green">5 محافظ</span><span class="pill pill-blue">18 برنامجاً</span><span class="pill pill-amber">74 مشروعاً</span></div>
   </div>
-
   <div class="content">
 
-    <!-- ملخص مؤسسي -->
     <div class="section">
-      <div class="section-label">الملخص المؤسسي الشامل</div>
-      <div class="kpi-grid kpi-grid-8">
-        <div class="kpi-card accent-green">
-          <div class="kpi-label">المحافظ</div>
-          <div class="kpi-val v-green">5</div>
-          <div class="kpi-sub">محافظ نشطة</div>
-        </div>
-        <div class="kpi-card accent-blue">
-          <div class="kpi-label">البرامج</div>
-          <div class="kpi-val v-blue">18</div>
-          <div class="kpi-sub">برنامج مؤسسي</div>
-        </div>
-        <div class="kpi-card accent-purple">
-          <div class="kpi-label">المشاريع</div>
-          <div class="kpi-val v-purple">74</div>
-          <div class="kpi-sub">مشروع تحت التنفيذ</div>
-        </div>
-        <div class="kpi-card accent-red">
-          <div class="kpi-label">المخاطر</div>
-          <div class="kpi-val v-red">43</div>
-          <div class="kpi-sub">خطر مفتوح</div>
-        </div>
-        <div class="kpi-card accent-amber">
-          <div class="kpi-label">التحديات</div>
-          <div class="kpi-val v-amber">27</div>
-          <div class="kpi-sub">تحدٍّ قائم</div>
-        </div>
-        <div class="kpi-card accent-red">
-          <div class="kpi-label">التصعيدات</div>
-          <div class="kpi-val v-red">12</div>
-          <div class="kpi-sub">تصعيد مفتوح</div>
-        </div>
-        <div class="kpi-card accent-purple">
-          <div class="kpi-label">الاعتماديات</div>
-          <div class="kpi-val v-purple">31</div>
-          <div class="kpi-sub">اعتمادية بين المشاريع</div>
-        </div>
-        <div class="kpi-card accent-green">
-          <div class="kpi-label">الحالة العامة</div>
-          <div class="kpi-val" style="font-size:20px; color:var(--amber);">متأخر</div>
-          <div class="kpi-sub" style="margin-top:8px;"><span class="badge badge-mh">71% إنجاز</span></div>
-        </div>
+      <div class="section-label">أ — الشريط العلوي: الملخص المؤسسي</div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(8,1fr);">
+        <div class="kpi-card accent-green"><div class="kpi-label">المحافظ</div><div class="kpi-val v-green">5</div><div class="kpi-sub">محافظ نشطة</div></div>
+        <div class="kpi-card accent-blue"><div class="kpi-label">البرامج</div><div class="kpi-val v-blue">18</div><div class="kpi-sub">برنامج مؤسسي</div></div>
+        <div class="kpi-card accent-purple"><div class="kpi-label">المشاريع</div><div class="kpi-val v-purple">74</div><div class="kpi-sub">تحت التنفيذ</div></div>
+        <div class="kpi-card accent-red"><div class="kpi-label">المخاطر</div><div class="kpi-val v-red">43</div><div class="kpi-sub">خطر مفتوح</div></div>
+        <div class="kpi-card accent-amber"><div class="kpi-label">التحديات</div><div class="kpi-val v-amber">27</div><div class="kpi-sub">تحدٍّ قائم</div></div>
+        <div class="kpi-card accent-red"><div class="kpi-label">التصعيدات</div><div class="kpi-val v-red">12</div><div class="kpi-sub">تصعيد مفتوح</div></div>
+        <div class="kpi-card accent-purple"><div class="kpi-label">الاعتماديات</div><div class="kpi-val v-purple">31</div><div class="kpi-sub">بين المشاريع</div></div>
+        <div class="kpi-card accent-amber"><div class="kpi-label">الحالة العامة</div><div class="kpi-val" style="font-size:17px;color:var(--amber);margin-top:6px;">متأخر</div><div class="kpi-sub" style="margin-top:6px;"><span class="badge badge-mh">71% التزام</span></div></div>
       </div>
     </div>
 
-    <!-- أداء المحافظ -->
     <div class="section">
-      <div class="section-label">أداء المحافظ المؤسسية</div>
+      <div class="section-label">ب — قسم أداء المحافظ</div>
       <div class="card">
-        <div class="card-header">
-          <div class="card-icon ci-blue">◈</div>
-          <div>
-            <div class="card-title">مقارنة أداء المحافظ</div>
-            <div class="card-sub">الالتزام والإنفاق والمخاطر لكل محفظة</div>
-          </div>
-        </div>
+        <div class="card-header"><div class="card-icon ci-blue">◈</div><div><div class="card-title">جدول مقارنة المحافظ</div><div class="card-sub">الالتزام، الإنجاز، المخاطر، التصعيدات، الإنفاق، الانحراف المالي</div></div></div>
         <div style="overflow-x:auto;">
           <table class="tbl">
-            <thead>
-              <tr>
-                <th>المحفظة</th>
-                <th>البرامج</th>
-                <th>المشاريع</th>
-                <th>الحالة</th>
-                <th>الالتزام %</th>
-                <th>المخاطر</th>
-                <th>التصعيدات</th>
-                <th>الإنفاق الفعلي / المخطط</th>
-                <th>الإجراء</th>
-              </tr>
-            </thead>
+            <thead><tr><th>المحفظة</th><th>البرامج</th><th>المشاريع</th><th>الحالة</th><th>الالتزام</th><th>الإنجاز</th><th>المخاطر</th><th>التصعيدات</th><th>الإنفاق / المخطط</th><th>الانحراف</th><th>التفاصيل</th></tr></thead>
             <tbody>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('portfolio')">محفظة التحول الرقمي</a></div><div class="port-sub">قطاع التقنية</div></td>
-                <td><strong>5</strong></td><td><strong>22</strong></td>
-                <td><span class="badge badge-mh">متأخر</span></td>
-                <td><strong class="v-amber">68%</strong></td>
-                <td><strong class="v-red">14</strong></td>
-                <td><strong class="v-red">4</strong></td>
-                <td>
-                  <div style="margin-bottom:4px; font-size:11px; color:var(--muted);">720 / 980 م.ر</div>
-                  <div class="progress-wrap"><div class="progress-fill progress-amber" style="width:73%"></div></div>
-                </td>
-                <td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td>
-              </tr>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('portfolio')">محفظة البنية التحتية</a></div><div class="port-sub">الأشغال العامة</div></td>
-                <td><strong>4</strong></td><td><strong>18</strong></td>
-                <td><span class="badge badge-green">على المسار</span></td>
-                <td><strong class="v-green">85%</strong></td>
-                <td><strong class="v-amber">8</strong></td>
-                <td><strong class="v-amber">2</strong></td>
-                <td>
-                  <div style="margin-bottom:4px; font-size:11px; color:var(--muted);">510 / 600 م.ر</div>
-                  <div class="progress-wrap"><div class="progress-fill progress-green" style="width:85%"></div></div>
-                </td>
-                <td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td>
-              </tr>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('portfolio')">محفظة الصحة الرقمية</a></div><div class="port-sub">وزارة الصحة</div></td>
-                <td><strong>3</strong></td><td><strong>14</strong></td>
-                <td><span class="badge badge-hh">متعثر</span></td>
-                <td><strong class="v-red">44%</strong></td>
-                <td><strong class="v-red">12</strong></td>
-                <td><strong class="v-red">4</strong></td>
-                <td>
-                  <div style="margin-bottom:4px; font-size:11px; color:var(--muted);">180 / 420 م.ر</div>
-                  <div class="progress-wrap"><div class="progress-fill progress-red" style="width:43%"></div></div>
-                </td>
-                <td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td>
-              </tr>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('portfolio')">محفظة التعليم والكفاءات</a></div><div class="port-sub">وزارة التعليم</div></td>
-                <td><strong>4</strong></td><td><strong>13</strong></td>
-                <td><span class="badge badge-green">على المسار</span></td>
-                <td><strong class="v-green">79%</strong></td>
-                <td><strong class="v-amber">6</strong></td>
-                <td><strong>1</strong></td>
-                <td>
-                  <div style="margin-bottom:4px; font-size:11px; color:var(--muted);">290 / 370 م.ر</div>
-                  <div class="progress-wrap"><div class="progress-fill progress-green" style="width:78%"></div></div>
-                </td>
-                <td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td>
-              </tr>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('portfolio')">محفظة الخدمات الحكومية</a></div><div class="port-sub">رقمنة الخدمات</div></td>
-                <td><strong>2</strong></td><td><strong>7</strong></td>
-                <td><span class="badge badge-mh">متأخر</span></td>
-                <td><strong class="v-amber">61%</strong></td>
-                <td><strong class="v-amber">3</strong></td>
-                <td><strong>1</strong></td>
-                <td>
-                  <div style="margin-bottom:4px; font-size:11px; color:var(--muted);">95 / 160 م.ر</div>
-                  <div class="progress-wrap"><div class="progress-fill progress-amber" style="width:59%"></div></div>
-                </td>
-                <td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td>
-              </tr>
+              <tr><td><strong><a class="tbl-link" onclick="showPage('portfolio')">محفظة التحول الرقمي</a></strong><div style="font-size:10px;color:var(--muted);">قطاع التقنية</div></td><td>5</td><td>22</td><td><span class="badge badge-mh">متأخر</span></td><td><strong class="v-amber">68%</strong></td><td><strong class="v-amber">64%</strong></td><td><strong class="v-red">14</strong></td><td><strong class="v-red">4</strong></td><td><div style="font-size:10px;margin-bottom:3px;">720 / 980 م.ر</div><div class="progress-wrap"><div class="progress-fill pg-amber" style="width:73%"></div></div></td><td><strong class="v-red">−260م</strong></td><td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td></tr>
+              <tr><td><strong><a class="tbl-link" onclick="showPage('portfolio')">محفظة البنية التحتية</a></strong><div style="font-size:10px;color:var(--muted);">الأشغال العامة</div></td><td>4</td><td>18</td><td><span class="badge badge-green">على المسار</span></td><td><strong class="v-green">85%</strong></td><td><strong class="v-green">82%</strong></td><td><strong class="v-amber">8</strong></td><td><strong class="v-amber">2</strong></td><td><div style="font-size:10px;margin-bottom:3px;">510 / 600 م.ر</div><div class="progress-wrap"><div class="progress-fill pg-green" style="width:85%"></div></div></td><td><strong class="v-amber">−90م</strong></td><td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td></tr>
+              <tr><td><strong><a class="tbl-link" onclick="showPage('portfolio')">محفظة الصحة الرقمية</a></strong><div style="font-size:10px;color:var(--muted);">وزارة الصحة</div></td><td>3</td><td>14</td><td><span class="badge badge-hh">متعثر</span></td><td><strong class="v-red">44%</strong></td><td><strong class="v-red">40%</strong></td><td><strong class="v-red">12</strong></td><td><strong class="v-red">4</strong></td><td><div style="font-size:10px;margin-bottom:3px;">180 / 420 م.ر</div><div class="progress-wrap"><div class="progress-fill pg-red" style="width:43%"></div></div></td><td><strong class="v-red">−240م</strong></td><td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td></tr>
+              <tr><td><strong><a class="tbl-link" onclick="showPage('portfolio')">محفظة التعليم والكفاءات</a></strong><div style="font-size:10px;color:var(--muted);">وزارة التعليم</div></td><td>4</td><td>13</td><td><span class="badge badge-green">على المسار</span></td><td><strong class="v-green">79%</strong></td><td><strong class="v-green">76%</strong></td><td><strong class="v-amber">6</strong></td><td><strong>1</strong></td><td><div style="font-size:10px;margin-bottom:3px;">290 / 370 م.ر</div><div class="progress-wrap"><div class="progress-fill pg-green" style="width:78%"></div></div></td><td><strong class="v-amber">−80م</strong></td><td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td></tr>
+              <tr><td><strong><a class="tbl-link" onclick="showPage('portfolio')">محفظة الخدمات الحكومية</a></strong><div style="font-size:10px;color:var(--muted);">رقمنة الخدمات</div></td><td>2</td><td>7</td><td><span class="badge badge-mh">متأخر</span></td><td><strong class="v-amber">61%</strong></td><td><strong class="v-amber">58%</strong></td><td><strong class="v-amber">3</strong></td><td><strong>1</strong></td><td><div style="font-size:10px;margin-bottom:3px;">95 / 160 م.ر</div><div class="progress-wrap"><div class="progress-fill pg-amber" style="width:59%"></div></div></td><td><strong class="v-red">−65م</strong></td><td><a class="tbl-link" onclick="showPage('portfolio')">عرض ←</a></td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- أداء مقارن + مخاطر -->
     <div class="section">
-      <div class="section-label">الأداء المؤسسي المقارن والمخاطر الحرجة</div>
+      <div class="section-label">ج — قسم الأداء المؤسسي المقارن</div>
       <div class="grid2">
-
-        <!-- مقارن -->
         <div class="card accent-blue">
-          <div class="card-header">
-            <div class="card-icon ci-blue">▦</div>
-            <div>
-              <div class="card-title">الأداء المؤسسي المقارن</div>
-              <div class="card-sub">مقارنة المحافظ عبر المؤشرات الرئيسية</div>
-            </div>
-          </div>
-          <div class="chart-wrap" style="height:230px;">
-            <canvas id="pmoRadarChart"></canvas>
-          </div>
-          <div class="legend" style="margin-top:10px; justify-content:center;">
-            <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>التحول الرقمي</div>
-            <div class="legend-item"><div class="legend-dot" style="background:var(--blue);"></div>البنية التحتية</div>
-            <div class="legend-item"><div class="legend-dot" style="background:var(--red);"></div>الصحة الرقمية</div>
-          </div>
+          <div class="card-header"><div class="card-icon ci-blue">▦</div><div><div class="card-title">مقارنة الالتزام والإنجاز بين المحافظ</div><div class="card-sub">نسبة الالتزام % مقابل الإنجاز %</div></div></div>
+          <div class="chart-wrap" style="height:220px;"><canvas id="pmoCompareBar"></canvas></div>
+          <div class="legend" style="margin-top:10px;justify-content:center;"><div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>الالتزام %</div><div class="legend-item"><div class="legend-dot" style="background:var(--blue);"></div>الإنجاز %</div></div>
         </div>
-
-        <!-- مخاطر وتصعيدات -->
-        <div class="card accent-red">
-          <div class="card-header">
-            <div class="card-icon ci-red">⚑</div>
-            <div>
-              <div class="card-title">المخاطر والتصعيدات الحرجة</div>
-              <div class="card-sub">أعلى المحافظ مخاطرةً والاعتماديات المتقاطعة</div>
-            </div>
-          </div>
-          <div class="risk-row">
-            <div style="flex:1;">
-              <div class="risk-name">تأخر منصة الخدمات الصحية الرقمية</div>
-              <div class="risk-meta">محفظة الصحة — يؤثر على 3 محافظ أخرى</div>
-            </div>
-            <span class="badge badge-hh">حرج</span>
-          </div>
-          <div class="risk-row">
-            <div style="flex:1;">
-              <div class="risk-name">عجز مالي في برنامج البنية التحتية 2</div>
-              <div class="risk-meta">انحراف 18% عن الميزانية المعتمدة</div>
-            </div>
-            <span class="badge badge-hh">عالي</span>
-          </div>
-          <div class="risk-row">
-            <div style="flex:1;">
-              <div class="risk-name">اعتماديات غير محلولة بين 4 مشاريع</div>
-              <div class="risk-meta">تحول رقمي × بنية تحتية — تأثير متقاطع</div>
-            </div>
-            <span class="badge badge-hh">عالي</span>
-          </div>
-          <div class="risk-row">
-            <div style="flex:1;">
-              <div class="risk-name">قرار تصعيد: موارد بشرية لمشروع X</div>
-              <div class="risk-meta">ينتظر قرار إدارة عليا منذ 14 يوماً</div>
-            </div>
-            <span class="badge badge-mh">متوسط</span>
-          </div>
-          <div class="risk-row">
-            <div style="flex:1;">
-              <div class="risk-name">تأخر مشروع التعليم الإلكتروني</div>
-              <div class="risk-meta">تأخر 6 أسابيع — يؤثر على 2 برنامج</div>
-            </div>
-            <span class="badge badge-mh">متوسط</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- الميزانية المؤسسية -->
-    <div class="section">
-      <div class="section-label">الميزانية والإنفاق المؤسسي</div>
-      <div class="grid2">
-
         <div class="card accent-purple">
-          <div class="card-header">
-            <div class="card-icon ci-purple">＄</div>
-            <div>
-              <div class="card-title">الإنفاق الفعلي مقابل المخطط بالمحافظ</div>
-              <div class="card-sub">مليون ريال</div>
-            </div>
-          </div>
-          <div class="chart-wrap" style="height:220px;">
-            <canvas id="pmoBudgetBar"></canvas>
-          </div>
-          <div class="legend" style="margin-top:10px; justify-content:center;">
-            <div class="legend-item"><div class="legend-dot" style="background:var(--blue-mid);"></div>المخطط</div>
-            <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>الفعلي</div>
-          </div>
-          <div class="totals-row">
-            <div class="total-card"><div class="total-lbl">إجمالي الميزانية</div><div class="total-val">2.53 مليار</div></div>
-            <div class="total-card"><div class="total-lbl">الإنفاق الفعلي</div><div class="total-val v-blue">1.795 مليار</div></div>
-          </div>
-        </div>
-
-        <div class="card accent-green">
-          <div class="card-header">
-            <div class="card-icon ci-green">◑</div>
-            <div>
-              <div class="card-title">توزيع الإنجاز المؤسسي</div>
-              <div class="card-sub">حالة المشاريع عبر المحافظ</div>
-            </div>
-          </div>
-          <div class="pie-area" style="margin-top:10px;">
-            <div class="pie-wrap" style="width:150px; height:150px;">
-              <canvas id="pmoPie"></canvas>
-            </div>
-            <div class="pie-legend">
-              <div class="pie-legend-row">
-                <div class="pie-dot" style="background:var(--green);"></div>
-                <span class="pie-lbl">على المسار</span>
-                <span class="pie-val v-green">32</span>
-              </div>
-              <div class="pie-legend-row">
-                <div class="pie-dot" style="background:var(--amber);"></div>
-                <span class="pie-lbl">متأخرة</span>
-                <span class="pie-val v-amber">24</span>
-              </div>
-              <div class="pie-legend-row">
-                <div class="pie-dot" style="background:var(--red);"></div>
-                <span class="pie-lbl">متعثرة</span>
-                <span class="pie-val v-red">11</span>
-              </div>
-              <div class="pie-legend-row">
-                <div class="pie-dot" style="background:var(--blue);"></div>
-                <span class="pie-lbl">مكتملة</span>
-                <span class="pie-val v-blue">7</span>
-              </div>
-            </div>
-          </div>
-          <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border);">
-            <div class="pillar-row">
-              <div class="pillar-info"><div class="pillar-name">الالتزام المتوسط عبر المحافظ</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:71%; background:var(--amber);"></div></div></div>
-              <div class="pillar-pct v-amber">71%</div>
-            </div>
-            <div class="pillar-row">
-              <div class="pillar-info"><div class="pillar-name">نسبة الإنجاز الكلية</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:64%; background:var(--blue);"></div></div></div>
-              <div class="pillar-pct v-blue">64%</div>
-            </div>
-            <div class="pillar-row">
-              <div class="pillar-info"><div class="pillar-name">معدل تنفيذ الميزانية</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:71%; background:var(--green);"></div></div></div>
-              <div class="pillar-pct v-green">71%</div>
-            </div>
+          <div class="card-header"><div class="card-icon ci-purple">◑</div><div><div class="card-title">المؤشرات المقارنة المؤسسية</div><div class="card-sub">كثافة المخاطر — التصعيدات — المتأخرة</div></div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">نسبة الالتزام المتوسطة</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:71%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">71%</div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">نسبة الإنجاز الكلية</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:64%;background:var(--blue);"></div></div></div><div class="pillar-pct v-blue">64%</div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">تنفيذ الميزانية المؤسسية</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:71%;background:var(--green);"></div></div></div><div class="pillar-pct v-green">71%</div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">المشاريع على المسار (من 74)</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:43%;background:var(--red);"></div></div></div><div class="pillar-pct v-red">43%</div></div>
+          <div class="mini-stat-grid ms4">
+            <div class="ms-cell msc-green"><div class="ms-cell-val v-green">32</div><div class="ms-cell-lbl" style="color:var(--green);">على المسار</div></div>
+            <div class="ms-cell msc-amber"><div class="ms-cell-val v-amber">24</div><div class="ms-cell-lbl" style="color:var(--amber);">متأخرة</div></div>
+            <div class="ms-cell msc-red"><div class="ms-cell-val v-red">11</div><div class="ms-cell-lbl" style="color:var(--red);">متعثرة</div></div>
+            <div class="ms-cell msc-blue"><div class="ms-cell-val v-blue">7</div><div class="ms-cell-lbl" style="color:var(--blue);">مكتملة</div></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ملاحظات تشغيلية -->
     <div class="section">
-      <div class="section-label">الملاحظات التشغيلية ومتطلبات التدخل</div>
+      <div class="section-label">د — قسم المخاطر والتصعيدات الحرجة</div>
+      <div class="grid3">
+        <div class="card accent-red">
+          <div class="card-header"><div class="card-icon ci-red">⚑</div><div><div class="card-title">أعلى المحافظ مخاطرة وتعثراً</div><div class="card-sub">أعلى البرامج تعثراً والمحافظ الحرجة</div></div></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">محفظة الصحة الرقمية</div><div class="risk-meta">12 خطر — 4 تصعيدات — 44% التزام</div></div><span class="badge badge-hh">حرج</span></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">محفظة التحول الرقمي</div><div class="risk-meta">14 خطر — 4 تصعيدات — 68% التزام</div></div><span class="badge badge-mh">عالي</span></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">برنامج الأمن السيبراني</div><div class="risk-meta">تعثر 48% — متأخر 7 أسابيع</div></div><span class="badge badge-hh">حرج</span></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">برنامج البيانات الوطنية</div><div class="risk-meta">تأخر في التسليم — 61% إنجاز</div></div><span class="badge badge-mh">عالي</span></div>
+        </div>
+
+        <div class="card accent-red">
+          <div class="card-header"><div class="card-icon ci-red">↑</div><div><div class="card-title">التصعيدات المفتوحة ذات الأولوية</div><div class="card-sub">12 تصعيد — التصعيدات حسب السبب والمالك والمدة</div></div></div>
+          <div class="esc-row"><div class="esc-num">1</div><div style="flex:1;"><div class="esc-title">توقف منصة الخدمات الصحية</div><div class="esc-meta">المالك: أ. فيصل — السبب: تأخر عقود</div></div><div class="esc-aging">32 يوم</div></div>
+          <div class="esc-row"><div class="esc-num">2</div><div style="flex:1;"><div class="esc-title">موارد بشرية — الأمن السيبراني</div><div class="esc-meta">المالك: أ. خالد — السبب: شاغر تقني</div></div><div class="esc-aging">21 يوم</div></div>
+          <div class="esc-row"><div class="esc-num">3</div><div style="flex:1;"><div class="esc-title">اعتماد ميزانية إضافية — بنية تحتية</div><div class="esc-meta">المالك: أ. نورة — تجاوز 18%</div></div><div class="esc-aging">14 يوم</div></div>
+          <div class="esc-row"><div class="esc-num">4</div><div style="flex:1;"><div class="esc-title">تعارض جدول — بين محفظتين</div><div class="esc-meta">المالك: أ. سارة — يتطلب قرار تنفيذي</div></div><div class="esc-aging">9 يوم</div></div>
+        </div>
+
+        <div class="card accent-amber">
+          <div class="card-header"><div class="card-icon ci-amber">↔</div><div><div class="card-title">الاعتماديات المؤثرة على أكثر من محفظة</div><div class="card-sub">اعتماديات متقاطعة مؤسسية</div></div></div>
+          <div class="driver-row"><div class="driver-icon di-red">↔</div><div style="flex:1;"><div class="driver-title">بنية السحابة ← تحول رقمي + صحة</div><div class="driver-sub">شرط مسبق لـ 6 مشاريع في محفظتين</div></div><span class="badge badge-hh">حرج</span></div>
+          <div class="driver-row"><div class="driver-icon di-amber">↔</div><div style="flex:1;"><div class="driver-title">API الوطني ← تعليم + خدمات حكومية</div><div class="driver-sub">تكامل بين 3 جهات — معلق 3 أسابيع</div></div><span class="badge badge-mh">عالي</span></div>
+          <div class="driver-row"><div class="driver-icon di-amber">↔</div><div style="flex:1;"><div class="driver-title">منصة الهوية الرقمية ← 4 محافظ</div><div class="driver-sub">تأخر التسليم يؤخر 11 مشروعاً</div></div><span class="badge badge-mh">عالي</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">هـ — قسم الميزانية والصرف المؤسسي</div>
+      <div class="grid2">
+        <div class="card accent-purple">
+          <div class="card-header"><div class="card-icon ci-purple">＄</div><div><div class="card-title">الإنفاق الفعلي مقابل المخطط — حسب المحفظة</div><div class="card-sub">مليون ريال — الانحراف حسب المحفظة والبرنامج</div></div></div>
+          <div class="chart-wrap" style="height:210px;"><canvas id="pmoBudgetBar"></canvas></div>
+          <div class="legend" style="margin-top:10px;justify-content:center;"><div class="legend-item"><div class="legend-dot" style="background:var(--blue-mid);"></div>المخطط</div><div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>الفعلي</div></div>
+          <div class="totals-row"><div class="total-card"><div class="total-lbl">إجمالي الميزانية</div><div class="total-val">2.53 مليار</div></div><div class="total-card"><div class="total-lbl">الإنفاق الفعلي</div><div class="total-val v-blue">1.795 مليار</div></div></div>
+        </div>
+        <div class="card accent-green">
+          <div class="card-header"><div class="card-icon ci-green">◑</div><div><div class="card-title">الانحراف المالي حسب المحفظة</div><div class="card-sub">الفرق بين الصرف المخطط والفعلي</div></div></div>
+          <div class="chart-wrap" style="height:210px;"><canvas id="pmoVarianceBar"></canvas></div>
+          <div class="legend" style="margin-top:10px;justify-content:center;"><div class="legend-item"><div class="legend-dot" style="background:var(--red);"></div>انحراف سلبي</div><div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>انحراف إيجابي</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">و — قسم المهام والملاحظات التشغيلية</div>
       <div class="grid4">
-        <div class="kpi-card accent-amber">
-          <div class="kpi-label">المهام المعلقة</div>
-          <div class="kpi-val v-amber">148</div>
-          <div class="kpi-sub">مهمة بانتظار الإنجاز</div>
-        </div>
-        <div class="kpi-card accent-red">
-          <div class="kpi-label">البنود المتأخرة</div>
-          <div class="kpi-val v-red">39</div>
-          <div class="kpi-sub">تجاوزت الموعد المحدد</div>
-        </div>
-        <div class="kpi-card accent-red">
-          <div class="kpi-label">تتطلب تدخل PMO</div>
-          <div class="kpi-val v-red">11</div>
-          <div class="kpi-sub">مشروع يحتاج تدخلاً فورياً</div>
-        </div>
-        <div class="kpi-card accent-purple">
-          <div class="kpi-label">تتطلب قرار إدارة</div>
-          <div class="kpi-val v-purple">6</div>
-          <div class="kpi-sub">برامج تنتظر قراراً عالياً</div>
-        </div>
+        <div class="kpi-card accent-amber"><div class="kpi-label">المهام المعلقة</div><div class="kpi-val v-amber">148</div><div class="kpi-sub">مهمة بانتظار الإنجاز</div></div>
+        <div class="kpi-card accent-red"><div class="kpi-label">العناصر المتأخرة</div><div class="kpi-val v-red">39</div><div class="kpi-sub">تجاوزت الموعد المحدد</div></div>
+        <div class="kpi-card accent-red"><div class="kpi-label">تتطلب تدخل PMO</div><div class="kpi-val v-red">11</div><div class="kpi-sub">مشروع يحتاج تدخلاً فورياً</div></div>
+        <div class="kpi-card accent-purple"><div class="kpi-label">تتطلب قرار إداري</div><div class="kpi-val v-purple">6</div><div class="kpi-sub">برامج تنتظر قراراً عالياً</div></div>
       </div>
     </div>
 
   </div>
 </div>
 
-<!-- ================================================================
-     PAGE: PORTFOLIO
-================================================================ -->
+<!-- ==================== PORTFOLIO ==================== -->
 <div id="page-portfolio" class="page-section">
-
   <div class="header-strip">
-    <div>
-      <div class="page-title">لوحة المحفظة — محفظة التحول الرقمي</div>
-      <div class="page-sub">نظرة تفصيلية على المحفظة: البرامج، المشاريع، الميزانية، المخاطر</div>
-    </div>
-    <div class="header-pills">
-      <span class="pill pill-blue">5 برامج</span>
-      <span class="pill pill-purple">22 مشروعاً</span>
-      <span class="pill pill-amber">68% التزام</span>
-    </div>
+    <div><div class="page-title">لوحة المحفظة — محفظة التحول الرقمي</div><div class="page-sub">نظرة إشرافية شاملة على البرامج والمشاريع والمخاطر والتصعيدات والميزانية</div></div>
+    <div class="header-pills"><span class="pill pill-blue">5 برامج</span><span class="pill pill-amber">22 مشروعاً</span><span class="pill pill-amber">68% التزام</span></div>
   </div>
-
   <div class="content">
 
-    <!-- ملخص المحفظة -->
     <div class="section">
-      <div class="section-label">ملخص المحفظة</div>
-      <div class="kpi-grid kpi-grid-6">
-        <div class="kpi-card accent-green">
-          <div class="kpi-label">نسبة الإنجاز</div>
-          <div class="kpi-val v-green">68%</div>
-          <div class="kpi-sub">من الهدف السنوي</div>
-        </div>
-        <div class="kpi-card accent-amber">
-          <div class="kpi-label">الالتزام الزمني</div>
-          <div class="kpi-val v-amber">64%</div>
-          <div class="kpi-sub">مشاريع في الموعد</div>
-        </div>
-        <div class="kpi-card accent-blue">
-          <div class="kpi-label">الميزانية الكلية</div>
-          <div class="kpi-val v-blue" style="font-size:22px;">980م</div>
-          <div class="kpi-sub">مليون ريال</div>
-        </div>
-        <div class="kpi-card accent-green">
-          <div class="kpi-label">الإنفاق الفعلي</div>
-          <div class="kpi-val v-green" style="font-size:22px;">720م</div>
-          <div class="kpi-sub">73.5% من الميزانية</div>
-        </div>
-        <div class="kpi-card accent-red">
-          <div class="kpi-label">المخاطر المفتوحة</div>
-          <div class="kpi-val v-red">14</div>
-          <div class="kpi-sub">4 منها حرجة</div>
-        </div>
-        <div class="kpi-card accent-red">
-          <div class="kpi-label">التصعيدات</div>
-          <div class="kpi-val v-red">4</div>
-          <div class="kpi-sub">تنتظر قراراً</div>
-        </div>
+      <div class="section-label">أ — الشريط العلوي: ملخص المحفظة</div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(8,1fr);">
+        <div class="kpi-card accent-purple"><div class="kpi-label">المشاريع</div><div class="kpi-val v-purple">22</div><div class="kpi-sub">تحت التنفيذ</div></div>
+        <div class="kpi-card accent-blue"><div class="kpi-label">البرامج</div><div class="kpi-val v-blue">5</div><div class="kpi-sub">برامج نشطة</div></div>
+        <div class="kpi-card accent-red"><div class="kpi-label">المخاطر</div><div class="kpi-val v-red">14</div><div class="kpi-sub">4 منها حرجة</div></div>
+        <div class="kpi-card accent-amber"><div class="kpi-label">التحديات</div><div class="kpi-val v-amber">9</div><div class="kpi-sub">5 مفتوحة</div></div>
+        <div class="kpi-card accent-red"><div class="kpi-label">التصعيدات</div><div class="kpi-val v-red">4</div><div class="kpi-sub">تنتظر قراراً</div></div>
+        <div class="kpi-card accent-purple"><div class="kpi-label">الاعتماديات</div><div class="kpi-val v-purple">9</div><div class="kpi-sub">بين المشاريع</div></div>
+        <div class="kpi-card accent-amber"><div class="kpi-label">الحالة العامة</div><div class="kpi-val" style="font-size:17px;color:var(--amber);margin-top:6px;">متأخر</div><div class="kpi-sub" style="margin-top:6px;"><span class="badge badge-mh">متأخر</span></div></div>
+        <div class="kpi-card accent-amber"><div class="kpi-label">مستوى الالتزام العام</div><div class="kpi-val v-amber">68%</div><div class="kpi-sub">مستوى الالتزام</div></div>
       </div>
     </div>
 
-    <!-- هيكل المحفظة + أداء البرامج -->
     <div class="section">
-      <div class="section-label">هيكل المحفظة وأداء البرامج</div>
+      <div class="section-label">ب — قسم هيكل المحفظة</div>
       <div class="grid-1-2">
-
-        <!-- دونت -->
         <div class="card accent-green">
-          <div class="card-header">
-            <div class="card-icon ci-green">◑</div>
-            <div>
-              <div class="card-title">توزيع المشاريع</div>
-              <div class="card-sub">حسب الحالة</div>
-            </div>
-          </div>
-          <div class="pie-area" style="margin-top:6px; flex-direction:column; align-items:flex-start;">
-            <div class="pie-wrap" style="width:140px; height:140px; align-self:center;">
-              <canvas id="portPie"></canvas>
-            </div>
-            <div class="pie-legend" style="width:100%; margin-top:14px;">
-              <div class="pie-legend-row"><div class="pie-dot" style="background:var(--green);"></div><span class="pie-lbl">على المسار</span><span class="pie-val v-green">9</span></div>
+          <div class="card-header"><div class="card-icon ci-green">◑</div><div><div class="card-title">توزيع حالات المشاريع</div><div class="card-sub">سليم / متأخر / حرج</div></div></div>
+          <div class="pie-area" style="margin-top:6px;flex-direction:column;align-items:center;">
+            <div class="pie-wrap" style="width:130px;height:130px;"><canvas id="portPie"></canvas></div>
+            <div class="pie-legend" style="width:100%;margin-top:12px;">
+              <div class="pie-legend-row"><div class="pie-dot" style="background:var(--green);"></div><span class="pie-lbl">سليم — على المسار</span><span class="pie-val v-green">9</span></div>
               <div class="pie-legend-row"><div class="pie-dot" style="background:var(--amber);"></div><span class="pie-lbl">متأخرة</span><span class="pie-val v-amber">8</span></div>
-              <div class="pie-legend-row"><div class="pie-dot" style="background:var(--red);"></div><span class="pie-lbl">متعثرة</span><span class="pie-val v-red">4</span></div>
+              <div class="pie-legend-row"><div class="pie-dot" style="background:var(--red);"></div><span class="pie-lbl">حرج — متعثرة</span><span class="pie-val v-red">4</span></div>
               <div class="pie-legend-row"><div class="pie-dot" style="background:var(--blue);"></div><span class="pie-lbl">مكتملة</span><span class="pie-val v-blue">1</span></div>
             </div>
           </div>
         </div>
-
-        <!-- البرامج -->
         <div class="card accent-blue">
-          <div class="card-header">
-            <div class="card-icon ci-blue">▦</div>
-            <div>
-              <div class="card-title">البرامج ضمن المحفظة</div>
-              <div class="card-sub">5 برامج — نسبة الإنجاز والالتزام</div>
-            </div>
-          </div>
-          <div class="pillar-row">
-            <div class="pillar-icon" style="background:var(--blue-pale); color:var(--blue);">١</div>
-            <div class="pillar-info">
-              <div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج الحكومة الإلكترونية</a> — 6 مشاريع</div>
-              <div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:82%; background:var(--green);"></div></div>
-            </div>
-            <div class="pillar-pct v-green">82%</div>
-            <span class="badge badge-green">على المسار</span>
-          </div>
-          <div class="pillar-row">
-            <div class="pillar-icon" style="background:var(--amber-bg); color:var(--amber);">٢</div>
-            <div class="pillar-info">
-              <div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج البيانات الوطنية</a> — 5 مشاريع</div>
-              <div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:61%; background:var(--amber);"></div></div>
-            </div>
-            <div class="pillar-pct v-amber">61%</div>
-            <span class="badge badge-mh">متأخر</span>
-          </div>
-          <div class="pillar-row">
-            <div class="pillar-icon" style="background:var(--red-bg); color:var(--red);">٣</div>
-            <div class="pillar-info">
-              <div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج الأمن السيبراني</a> — 4 مشاريع</div>
-              <div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:48%; background:var(--red);"></div></div>
-            </div>
-            <div class="pillar-pct v-red">48%</div>
-            <span class="badge badge-hh">متعثر</span>
-          </div>
-          <div class="pillar-row">
-            <div class="pillar-icon" style="background:var(--green-pale); color:var(--green);">٤</div>
-            <div class="pillar-info">
-              <div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج التحول السحابي</a> — 4 مشاريع</div>
-              <div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:75%; background:var(--amber);"></div></div>
-            </div>
-            <div class="pillar-pct v-amber">75%</div>
-            <span class="badge badge-mh">متأخر</span>
-          </div>
-          <div class="pillar-row">
-            <div class="pillar-icon" style="background:var(--purple-pale); color:var(--purple);">٥</div>
-            <div class="pillar-info">
-              <div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج الذكاء الاصطناعي</a> — 3 مشاريع</div>
-              <div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:58%; background:var(--amber);"></div></div>
-            </div>
-            <div class="pillar-pct v-amber">58%</div>
-            <span class="badge badge-mh">متأخر</span>
-          </div>
+          <div class="card-header"><div class="card-icon ci-blue">▦</div><div><div class="card-title">البرامج والمشاريع المباشرة</div><div class="card-sub">5 برامج — الالتزام والإنجاز</div></div></div>
+          <div class="pillar-row"><div class="pillar-icon" style="background:var(--green-pale);color:var(--green);">١</div><div class="pillar-info"><div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج الحكومة الإلكترونية</a> — 6 مشاريع</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:82%;background:var(--green);"></div></div></div><div class="pillar-pct v-green">82%</div><span class="badge badge-green">على المسار</span></div>
+          <div class="pillar-row"><div class="pillar-icon" style="background:var(--amber-bg);color:var(--amber);">٢</div><div class="pillar-info"><div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج البيانات الوطنية</a> — 5 مشاريع</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:61%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">61%</div><span class="badge badge-mh">متأخر</span></div>
+          <div class="pillar-row"><div class="pillar-icon" style="background:var(--red-bg);color:var(--red);">٣</div><div class="pillar-info"><div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج الأمن السيبراني</a> — 4 مشاريع</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:48%;background:var(--red);"></div></div></div><div class="pillar-pct v-red">48%</div><span class="badge badge-hh">متعثر</span></div>
+          <div class="pillar-row"><div class="pillar-icon" style="background:var(--blue-pale);color:var(--blue);">٤</div><div class="pillar-info"><div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج التحول السحابي</a> — 4 مشاريع</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:75%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">75%</div><span class="badge badge-mh">متأخر</span></div>
+          <div class="pillar-row"><div class="pillar-icon" style="background:var(--purple-pale);color:var(--purple);">٥</div><div class="pillar-info"><div class="pillar-name"><a class="tbl-link" onclick="showPage('program')">برنامج الذكاء الاصطناعي</a> — 3 مشاريع</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:58%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">58%</div><span class="badge badge-mh">متأخر</span></div>
         </div>
       </div>
     </div>
 
-    <!-- تفاصيل المشاريع -->
     <div class="section">
-      <div class="section-label">جدول البرامج والمشاريع</div>
+      <div class="section-label">ج — قسم تفاصيل البرامج والمشاريع</div>
       <div class="card">
-        <div class="card-header">
-          <div class="card-icon ci-purple">≡</div>
-          <div>
-            <div class="card-title">قائمة المشاريع التفصيلية</div>
-            <div class="card-sub">22 مشروعاً ضمن محفظة التحول الرقمي</div>
-          </div>
-        </div>
+        <div class="card-header"><div class="card-icon ci-purple">≡</div><div><div class="card-title">الجدول التفصيلي — الاسم، النوع، الحالة، الإنجاز، الالتزام، المخاطر، التحديات، المهام، التصعيدات</div><div class="card-sub">22 مشروعاً + 5 برامج ضمن المحفظة</div></div></div>
         <div style="overflow-x:auto;">
           <table class="tbl">
-            <thead>
-              <tr><th>المشروع</th><th>البرنامج</th><th>الحالة</th><th>الإنجاز</th><th>الجدول</th><th>الميزانية</th><th>الإنفاق</th><th>المالك</th><th>الإجراء</th></tr>
-            </thead>
+            <thead><tr><th>الاسم</th><th>النوع</th><th>الحالة</th><th>الإنجاز</th><th>الالتزام</th><th>مخاطر حرجة</th><th>التحديات</th><th>مهام معلقة</th><th>تصعيدات</th><th>الإجراء</th></tr></thead>
             <tbody>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('project')">بوابة الخدمات الحكومية</a></div></td>
-                <td>الحكومة الإلكترونية</td>
-                <td><span class="badge badge-green">على المسار</span></td>
-                <td><div style="display:flex;align-items:center;gap:8px;"><div class="progress-wrap" style="width:80px;"><div class="progress-fill progress-green" style="width:88%"></div></div><strong class="v-green">88%</strong></div></td>
-                <td><span class="badge badge-green">في الموعد</span></td>
-                <td>45م.ر</td><td>39م.ر</td><td>أ. محمد علي</td>
-                <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-              </tr>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('project')">منصة البيانات المفتوحة</a></div></td>
-                <td>البيانات الوطنية</td>
-                <td><span class="badge badge-mh">متأخر</span></td>
-                <td><div style="display:flex;align-items:center;gap:8px;"><div class="progress-wrap" style="width:80px;"><div class="progress-fill progress-amber" style="width:55%"></div></div><strong class="v-amber">55%</strong></div></td>
-                <td><span class="badge badge-hh">متأخر 3 أسابيع</span></td>
-                <td>60م.ر</td><td>29م.ر</td><td>أ. سارة الشمري</td>
-                <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-              </tr>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('project')">نظام الحماية السيبرانية</a></div></td>
-                <td>الأمن السيبراني</td>
-                <td><span class="badge badge-hh">متعثر</span></td>
-                <td><div style="display:flex;align-items:center;gap:8px;"><div class="progress-wrap" style="width:80px;"><div class="progress-fill progress-red" style="width:38%"></div></div><strong class="v-red">38%</strong></div></td>
-                <td><span class="badge badge-hh">متأخر 7 أسابيع</span></td>
-                <td>90م.ر</td><td>28م.ر</td><td>أ. خالد العتيبي</td>
-                <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-              </tr>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('project')">البنية التحتية السحابية</a></div></td>
-                <td>التحول السحابي</td>
-                <td><span class="badge badge-mh">متأخر</span></td>
-                <td><div style="display:flex;align-items:center;gap:8px;"><div class="progress-wrap" style="width:80px;"><div class="progress-fill progress-amber" style="width:72%"></div></div><strong class="v-amber">72%</strong></div></td>
-                <td><span class="badge badge-mh">متأخر أسبوعين</span></td>
-                <td>75م.ر</td><td>52م.ر</td><td>أ. نورة القحطاني</td>
-                <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-              </tr>
-              <tr>
-                <td><div class="port-name"><a class="tbl-link" onclick="showPage('project')">نظام الذكاء الاصطناعي للخدمات</a></div></td>
-                <td>الذكاء الاصطناعي</td>
-                <td><span class="badge badge-mh">متأخر</span></td>
-                <td><div style="display:flex;align-items:center;gap:8px;"><div class="progress-wrap" style="width:80px;"><div class="progress-fill progress-amber" style="width:51%"></div></div><strong class="v-amber">51%</strong></div></td>
-                <td><span class="badge badge-hh">متأخر 5 أسابيع</span></td>
-                <td>80م.ر</td><td>36م.ر</td><td>أ. فيصل الدوسري</td>
-                <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-              </tr>
+              <tr><td><strong><a class="tbl-link" onclick="showPage('program')">برنامج الحكومة الإلكترونية</a></strong></td><td><span class="badge badge-blue">برنامج</span></td><td><span class="badge badge-green">على المسار</span></td><td><strong class="v-green">82%</strong></td><td><strong class="v-green">85%</strong></td><td>2</td><td>3</td><td>18</td><td>1</td><td><a class="tbl-link" onclick="showPage('program')">عرض ←</a></td></tr>
+              <tr><td><a class="tbl-link" onclick="showPage('project')">بوابة الخدمات الحكومية</a></td><td><span class="badge badge-green">مشروع</span></td><td><span class="badge badge-green">على المسار</span></td><td><strong class="v-green">88%</strong></td><td><strong class="v-green">90%</strong></td><td>0</td><td>2</td><td>5</td><td>0</td><td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td></tr>
+              <tr><td><strong><a class="tbl-link" onclick="showPage('program')">برنامج البيانات الوطنية</a></strong></td><td><span class="badge badge-blue">برنامج</span></td><td><span class="badge badge-mh">متأخر</span></td><td><strong class="v-amber">61%</strong></td><td><strong class="v-amber">65%</strong></td><td>3</td><td>4</td><td>27</td><td>1</td><td><a class="tbl-link" onclick="showPage('program')">عرض ←</a></td></tr>
+              <tr><td><a class="tbl-link" onclick="showPage('project')">منصة البيانات المفتوحة</a></td><td><span class="badge badge-green">مشروع</span></td><td><span class="badge badge-mh">متأخر</span></td><td><strong class="v-amber">55%</strong></td><td><strong class="v-amber">58%</strong></td><td>2</td><td>3</td><td>12</td><td>1</td><td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td></tr>
+              <tr><td><strong><a class="tbl-link" onclick="showPage('program')">برنامج الأمن السيبراني</a></strong></td><td><span class="badge badge-blue">برنامج</span></td><td><span class="badge badge-hh">متعثر</span></td><td><strong class="v-red">48%</strong></td><td><strong class="v-red">44%</strong></td><td>5</td><td>5</td><td>34</td><td>2</td><td><a class="tbl-link" onclick="showPage('program')">عرض ←</a></td></tr>
+              <tr><td><a class="tbl-link" onclick="showPage('project')">نظام الحماية السيبرانية</a></td><td><span class="badge badge-green">مشروع</span></td><td><span class="badge badge-hh">متعثر</span></td><td><strong class="v-red">38%</strong></td><td><strong class="v-red">35%</strong></td><td>4</td><td>4</td><td>19</td><td>2</td><td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- مخاطر + ميزانية المحفظة -->
     <div class="section">
-      <div class="section-label">مخاطر المحفظة والاعتماديات والميزانية</div>
+      <div class="section-label">د — قسم المخاطر والاعتماديات</div>
       <div class="grid2">
         <div class="card accent-red">
-          <div class="card-header">
-            <div class="card-icon ci-red">⚑</div>
-            <div><div class="card-title">مخاطر المحفظة والاعتماديات</div><div class="card-sub">14 خطر مفتوح — 9 اعتماديات</div></div>
-          </div>
-          <div class="risk-row"><div style="flex:1;"><div class="risk-name">تأخر تسليم بنية السحابة يحجب 4 مشاريع</div><div class="risk-meta">اعتمادية: التحول السحابي → الذكاء الاصطناعي، الأمن</div></div><span class="badge badge-hh">حرج</span></div>
-          <div class="risk-row"><div style="flex:1;"><div class="risk-name">نقص موارد بشرية متخصصة في الأمن</div><div class="risk-meta">3 وظائف شاغرة منذ شهرين</div></div><span class="badge badge-hh">عالي</span></div>
-          <div class="risk-row"><div style="flex:1;"><div class="risk-name">ضعف التكامل بين الأنظمة الموروثة</div><div class="risk-meta">يؤثر على منصة البيانات المفتوحة</div></div><span class="badge badge-mh">متوسط</span></div>
-          <div class="risk-row"><div style="flex:1;"><div class="risk-name">تغيير متطلبات من جهة أصحاب المصلحة</div><div class="risk-meta">4 مشاريع تأثرت بتعديلات غير مخططة</div></div><span class="badge badge-mh">متوسط</span></div>
+          <div class="card-header"><div class="card-icon ci-red">⚑</div><div><div class="card-title">المخاطر الحرجة والمتكررة</div><div class="card-sub">أعلى مخاطر تهديداً للمحفظة — المخاطر المتكررة — العناصر الأكثر تهديداً</div></div></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">تأخر بنية السحابة — يحجب 4 مشاريع</div><div class="risk-meta">متكررة — يؤثر على التحول السحابي + الأمن</div></div><span class="badge badge-hh">حرج</span></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">نقص موارد بشرية متخصصة في الأمن</div><div class="risk-meta">متكررة — 3 وظائف شاغرة</div></div><span class="badge badge-hh">عالي</span></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">ضعف تكامل الأنظمة الموروثة</div><div class="risk-meta">يؤثر على منصة البيانات المفتوحة</div></div><span class="badge badge-mh">متوسط</span></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">تأخر موافقات الأمن المعلوماتي</div><div class="risk-meta">متكررة عبر 3 مشاريع — تعيق التسليم</div></div><span class="badge badge-mh">متوسط</span></div>
         </div>
+        <div class="card accent-amber">
+          <div class="card-header"><div class="card-icon ci-amber">↔</div><div><div class="card-title">الاعتماديات عالية التأثير</div><div class="card-sub">العناصر الأكثر تأثيراً على المحفظة</div></div></div>
+          <div class="driver-row"><div class="driver-icon di-red">!</div><div style="flex:1;"><div class="driver-title">بنية السحابة ← 4 برامج داخل المحفظة</div><div class="driver-sub">شرط مسبق لـ 4 مشاريع — معلق 5 أسابيع</div></div><span class="badge badge-hh">حرج</span></div>
+          <div class="driver-row"><div class="driver-icon di-amber">↔</div><div style="flex:1;"><div class="driver-title">API التكامل المركزي ← 3 مشاريع</div><div class="driver-sub">تأخر المورد يؤخر التسليم 4 أسابيع</div></div><span class="badge badge-mh">عالي</span></div>
+          <div class="driver-row"><div class="driver-icon di-amber">↔</div><div style="flex:1;"><div class="driver-title">بيئة الاختبار المشتركة ← 4 مشاريع</div><div class="driver-sub">غير متاحة بالكامل — تأخر أسبوعان</div></div><span class="badge badge-mh">عالي</span></div>
+        </div>
+      </div>
+    </div>
 
+    <div class="section">
+      <div class="section-label">هـ — قسم الميزانية والصرف</div>
+      <div class="grid2">
+        <div class="card accent-red">
+          <div class="card-header"><div class="card-icon ci-red">↑</div><div><div class="card-title">التصعيدات المفتوحة — المدة والسبب والجهة المالكة</div><div class="card-sub">4 تصعيدات مفتوحة — 2 تتطلب قراراً</div></div></div>
+          <div class="esc-row"><div class="esc-num">1</div><div style="flex:1;"><div class="esc-title">موارد الأمن السيبراني</div><div class="esc-meta">المالك: أ. خالد — السبب: شاغر تقني</div></div><div class="esc-aging">21 يوم</div></div>
+          <div class="esc-row"><div class="esc-num">2</div><div style="flex:1;"><div class="esc-title">تأخر تكامل API — البيانات</div><div class="esc-meta">المالك: أ. سارة — السبب: تعذر التنسيق</div></div><div class="esc-aging">14 يوم</div></div>
+          <div class="esc-row"><div class="esc-num">3</div><div style="flex:1;"><div class="esc-title">إعادة جدولة برنامج الأمن</div><div class="esc-meta">المالك: أ. خالد — يتطلب قرار تنفيذي</div></div><div class="esc-aging">9 أيام</div></div>
+          <div class="esc-row"><div class="esc-num">4</div><div style="flex:1;"><div class="esc-title">تعديل نطاق الذكاء الاصطناعي</div><div class="esc-meta">المالك: أ. محمد — السبب: أولويات جهة</div></div><div class="esc-aging">5 أيام</div></div>
+        </div>
+        <div class="card accent-red">
+          <div class="card-header"><div class="card-icon ci-red">⚡</div><div><div class="card-title">التصعيدات حسب السبب — التصعيدات الحرجة التي تتطلب قرار</div><div class="card-sub">توزيع التصعيدات ومدة بقائها مفتوحة</div></div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">نقص الموارد البشرية</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:75%;background:var(--red);"></div></div></div><div class="pillar-pct v-red">2</div><span class="badge badge-hh">حرج</span></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">تأخر التكامل التقني</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:50%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">1</div><span class="badge badge-mh">عالي</span></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">تعارض الأولويات</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:25%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">1</div><span class="badge badge-mh">متوسط</span></div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;">التصعيدات الحرجة التي تتطلب قرار</div>
+          <div class="esc-row"><div class="esc-num">!</div><div style="flex:1;"><div class="esc-title">موارد الأمن السيبراني — يتطلب قرار تنفيذي فوري</div><div class="esc-meta">المالك: أ. خالد — معلق 21 يوماً</div></div><div class="esc-aging">21 يوم</div></div>
+          <div class="esc-row"><div class="esc-num">!</div><div style="flex:1;"><div class="esc-title">إعادة جدولة برنامج الأمن</div><div class="esc-meta">المالك: أ. خالد — يتطلب موافقة PMO</div></div><div class="esc-aging">9 أيام</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">و — قسم التصعيدات</div>
+      <div class="grid2">
         <div class="card accent-purple">
-          <div class="card-header">
-            <div class="card-icon ci-purple">＄</div>
-            <div><div class="card-title">الميزانية والإنفاق بالبرامج</div><div class="card-sub">مليون ريال</div></div>
+          <div class="card-header"><div class="card-icon ci-purple">＄</div><div><div class="card-title">الميزانية والصرف — مقارنة حسب البرامج</div><div class="card-sub">الصرف المخطط مقابل الفعلي والانحراف</div></div></div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="portBudgetBar"></canvas></div>
+          <div class="legend" style="margin-top:10px;justify-content:center;"><div class="legend-item"><div class="legend-dot" style="background:var(--blue-mid);"></div>المخطط</div><div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>الفعلي</div></div>
+        </div>
+        <div class="card accent-blue">
+          <div class="card-header"><div class="card-icon ci-blue">＄</div><div><div class="card-title">ملخص الميزانية الإجمالي للمحفظة</div><div class="card-sub">المعتمدة، المخطط، الفعلي، الانحراف، نسبة الصرف</div></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+            <div class="total-card"><div class="total-lbl">الميزانية الكلية</div><div class="total-val">980م.ر</div></div>
+            <div class="total-card"><div class="total-lbl">الإنفاق الفعلي</div><div class="total-val v-blue">720م.ر</div></div>
           </div>
-          <div class="chart-wrap" style="height:220px;">
-            <canvas id="portBudgetBar"></canvas>
-          </div>
-          <div class="legend" style="margin-top:10px; justify-content:center;">
-            <div class="legend-item"><div class="legend-dot" style="background:var(--blue-mid);"></div>المخطط</div>
-            <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div>الفعلي</div>
-          </div>
+          <div class="stat-row"><span class="stat-label">الصرف المخطط حتى الآن</span><strong class="v-blue">810م.ر</strong></div>
+          <div class="stat-row"><span class="stat-label">الانحراف المالي</span><strong class="v-red">−90م.ر</strong></div>
+          <div class="stat-row"><span class="stat-label">نسبة الصرف إلى الميزانية</span><strong class="v-amber">73.5%</strong></div>
+          <div class="stat-row"><span class="stat-label">أعلى برنامج إنفاقاً</span><strong>الحكومة الإلكترونية: 198م</strong></div>
+          <div class="stat-row"><span class="stat-label">أدنى برنامج إنجازاً مالياً</span><strong class="v-red">الأمن السيبراني: 95م (45%)</strong></div>
+          <div class="pillar-row" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);"><div class="pillar-info"><div class="pillar-name">نسبة تنفيذ الميزانية الكلية</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:73.5%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">73.5%</div></div>
         </div>
       </div>
     </div>
@@ -1038,171 +531,118 @@ body {
   </div>
 </div>
 
-<!-- ================================================================
-     PAGE: PROGRAM
-================================================================ -->
+<!-- ==================== PROGRAM ==================== -->
 <div id="page-program" class="page-section">
-
   <div class="header-strip">
-    <div>
-      <div class="page-title">لوحة البرنامج — برنامج الحكومة الإلكترونية</div>
-      <div class="page-sub">المشاريع والمخاطر والميزانية والمهام والمعالم الرئيسية</div>
-    </div>
-    <div class="header-pills">
-      <span class="pill pill-green">6 مشاريع</span>
-      <span class="pill pill-blue">82% إنجاز</span>
-      <span class="pill pill-green">على المسار</span>
-    </div>
+    <div><div class="page-title">لوحة البرنامج — برنامج الحكومة الإلكترونية</div><div class="page-sub">التنسيق بين المشاريع، الاعتماديات، المخاطر المشتركة، الميزانية، المعالم</div></div>
+    <div class="header-pills"><span class="pill pill-green">6 مشاريع</span><span class="pill pill-blue">82% إنجاز</span><span class="pill pill-green">على المسار</span></div>
   </div>
-
   <div class="content">
 
-    <!-- ملخص البرنامج -->
     <div class="section">
-      <div class="section-label">ملخص البرنامج</div>
-      <div class="kpi-grid kpi-grid-6">
-        <div class="kpi-card accent-green"><div class="kpi-label">نسبة الإنجاز</div><div class="kpi-val v-green">82%</div><div class="kpi-sub">من مجموع المشاريع</div></div>
-        <div class="kpi-card accent-blue"><div class="kpi-label">الميزانية الكلية</div><div class="kpi-val v-blue" style="font-size:22px;">245م</div><div class="kpi-sub">مليون ريال</div></div>
-        <div class="kpi-card accent-green"><div class="kpi-label">الإنفاق الفعلي</div><div class="kpi-val v-green" style="font-size:22px;">198م</div><div class="kpi-sub">80.8% من الميزانية</div></div>
-        <div class="kpi-card accent-amber"><div class="kpi-label">المخاطر</div><div class="kpi-val v-amber">6</div><div class="kpi-sub">2 منها عالية التأثير</div></div>
-        <div class="kpi-card accent-green"><div class="kpi-label">المعالم المكتملة</div><div class="kpi-val v-green">14</div><div class="kpi-sub">من 18 معلماً</div></div>
-        <div class="kpi-card accent-amber"><div class="kpi-label">المهام المعلقة</div><div class="kpi-val v-amber">23</div><div class="kpi-sub">تنتظر الإنجاز</div></div>
+      <div class="section-label">أ — الشريط العلوي: ملخص البرنامج</div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(8,1fr);">
+        <div class="kpi-card accent-green"><div class="kpi-label">المشاريع</div><div class="kpi-val v-green">6</div><div class="kpi-sub">مشروع نشط</div></div>
+        <div class="kpi-card accent-amber"><div class="kpi-label">المخاطر</div><div class="kpi-val v-amber">6</div><div class="kpi-sub">2 منها عالية</div></div>
+        <div class="kpi-card accent-amber"><div class="kpi-label">التحديات</div><div class="kpi-val v-amber">5</div><div class="kpi-sub">3 مفتوحة</div></div>
+        <div class="kpi-card accent-blue"><div class="kpi-label">المخرجات</div><div class="kpi-val v-blue">24</div><div class="kpi-sub">19 منجزة</div></div>
+        <div class="kpi-card accent-green"><div class="kpi-label">المعالم</div><div class="kpi-val v-green">18</div><div class="kpi-sub">14 مكتملة</div></div>
+        <div class="kpi-card accent-purple"><div class="kpi-label">الاعتماديات</div><div class="kpi-val v-purple">7</div><div class="kpi-sub">3 معلقة</div></div>
+        <div class="kpi-card accent-green"><div class="kpi-label">الحالة العامة للبرنامج</div><div class="kpi-val" style="font-size:16px;color:var(--green);margin-top:6px;">🟢 على المسار</div><div class="kpi-sub" style="margin-top:4px;"><span class="badge badge-green">على المسار</span></div></div>
+        <div class="kpi-card accent-green"><div class="kpi-label">مستوى الالتزام العام</div><div class="kpi-val v-green">82%</div><div class="kpi-sub">مستوى البرنامج</div></div>
       </div>
     </div>
 
-    <!-- مشاريع البرنامج + اعتماديات -->
     <div class="section">
-      <div class="section-label">المشاريع والاعتماديات</div>
-      <div class="grid-2-1">
-        <div class="card accent-blue">
-          <div class="card-header">
-            <div class="card-icon ci-blue">▦</div>
-            <div><div class="card-title">المشاريع ضمن البرنامج</div><div class="card-sub">6 مشاريع — الإنجاز والحالة الزمنية</div></div>
-          </div>
-          <div style="overflow-x:auto;">
-            <table class="tbl">
-              <thead><tr><th>المشروع</th><th>الإنجاز</th><th>الجدول</th><th>الميزانية</th><th>المخاطر</th><th>الإجراء</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td><a class="tbl-link" onclick="showPage('project')">بوابة الخدمات الحكومية</a></td>
-                  <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:70px;"><div class="progress-fill progress-green" style="width:88%"></div></div><strong class="v-green">88%</strong></div></td>
-                  <td><span class="badge badge-green">في الموعد</span></td>
-                  <td>45م</td><td><span class="v-amber">2</span></td>
-                  <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-                </tr>
-                <tr>
-                  <td><a class="tbl-link" onclick="showPage('project')">نظام إدارة الوثائق</a></td>
-                  <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:70px;"><div class="progress-fill progress-green" style="width:95%"></div></div><strong class="v-green">95%</strong></div></td>
-                  <td><span class="badge badge-green">في الموعد</span></td>
-                  <td>32م</td><td><span class="v-green">1</span></td>
-                  <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-                </tr>
-                <tr>
-                  <td><a class="tbl-link" onclick="showPage('project')">منصة التوقيع الإلكتروني</a></td>
-                  <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:70px;"><div class="progress-fill progress-green" style="width:78%"></div></div><strong class="v-green">78%</strong></div></td>
-                  <td><span class="badge badge-mh">تأخر طفيف</span></td>
-                  <td>28م</td><td><span class="v-amber">2</span></td>
-                  <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-                </tr>
-                <tr>
-                  <td><a class="tbl-link" onclick="showPage('project')">نظام المدفوعات الإلكترونية</a></td>
-                  <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:70px;"><div class="progress-fill progress-green" style="width:91%"></div></div><strong class="v-green">91%</strong></div></td>
-                  <td><span class="badge badge-green">في الموعد</span></td>
-                  <td>55م</td><td><span class="v-green">1</span></td>
-                  <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-                </tr>
-                <tr>
-                  <td><a class="tbl-link" onclick="showPage('project')">تطبيق الخدمات الذكية</a></td>
-                  <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:70px;"><div class="progress-fill progress-amber" style="width:68%"></div></div><strong class="v-amber">68%</strong></div></td>
-                  <td><span class="badge badge-mh">متأخر أسبوع</span></td>
-                  <td>50م</td><td><span class="v-amber">0</span></td>
-                  <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-                </tr>
-                <tr>
-                  <td><a class="tbl-link" onclick="showPage('project')">بنية التكامل المؤسسي</a></td>
-                  <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:70px;"><div class="progress-fill progress-green" style="width:74%"></div></div><strong class="v-green">74%</strong></div></td>
-                  <td><span class="badge badge-green">في الموعد</span></td>
-                  <td>35م</td><td><span class="v-amber">0</span></td>
-                  <td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- اعتماديات -->
-        <div class="card accent-amber">
-          <div class="card-header">
-            <div class="card-icon ci-amber">↔</div>
-            <div><div class="card-title">الاعتماديات</div><div class="card-sub">بين المشاريع</div></div>
-          </div>
-          <div class="driver-row">
-            <div class="driver-icon di-amber">↔</div>
-            <div style="flex:1;">
-              <div class="driver-title">بوابة الخدمات ← نظام المدفوعات</div>
-              <div class="driver-sub">تكامل واجهات الدفع — نشط</div>
-            </div>
-            <span class="badge badge-green">محلول</span>
-          </div>
-          <div class="driver-row">
-            <div class="driver-icon di-amber">↔</div>
-            <div style="flex:1;">
-              <div class="driver-title">بنية التكامل ← جميع المشاريع</div>
-              <div class="driver-sub">شرط مسبق لتشغيل 4 مشاريع</div>
-            </div>
-            <span class="badge badge-mh">قيد العمل</span>
-          </div>
-          <div class="driver-row">
-            <div class="driver-icon di-red">↔</div>
-            <div style="flex:1;">
-              <div class="driver-title">التوقيع الإلكتروني ← الوثائق</div>
-              <div class="driver-sub">تأخر تسليم API يؤخر الدمج</div>
-            </div>
-            <span class="badge badge-hh">معلق</span>
-          </div>
+      <div class="section-label">ب — قسم حالة المشاريع التابعة للبرنامج</div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-blue">▦</div><div><div class="card-title">جدول مقارنة أداء المشاريع</div><div class="card-sub">الحالة، الإنجاز، الالتزام الزمني والمالي، المخاطر، المهام المعلقة</div></div></div>
+        <div style="overflow-x:auto;">
+          <table class="tbl">
+            <thead><tr><th>المشروع</th><th>الحالة</th><th>الإنجاز</th><th>الالتزام الزمني</th><th>الالتزام المالي</th><th>المخاطر</th><th>مهام معلقة</th><th>الميزانية</th><th>الإجراء</th></tr></thead>
+            <tbody>
+              <tr><td><a class="tbl-link" onclick="showPage('project')">بوابة الخدمات الحكومية</a></td><td><span class="badge badge-green">على المسار</span></td><td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:60px;"><div class="progress-fill pg-green" style="width:88%"></div></div><strong class="v-green">88%</strong></div></td><td><strong class="v-green">90%</strong></td><td><strong class="v-green">87%</strong></td><td>2</td><td>5</td><td>45م</td><td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td></tr>
+              <tr><td><a class="tbl-link" onclick="showPage('project')">نظام إدارة الوثائق</a></td><td><span class="badge badge-green">على المسار</span></td><td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:60px;"><div class="progress-fill pg-green" style="width:95%"></div></div><strong class="v-green">95%</strong></div></td><td><strong class="v-green">96%</strong></td><td><strong class="v-green">93%</strong></td><td>1</td><td>2</td><td>32م</td><td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td></tr>
+              <tr><td><a class="tbl-link" onclick="showPage('project')">منصة التوقيع الإلكتروني</a></td><td><span class="badge badge-mh">متأخر</span></td><td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:60px;"><div class="progress-fill pg-amber" style="width:78%"></div></div><strong class="v-amber">78%</strong></div></td><td><strong class="v-amber">72%</strong></td><td><strong class="v-green">80%</strong></td><td>2</td><td>8</td><td>28م</td><td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td></tr>
+              <tr><td><a class="tbl-link" onclick="showPage('project')">نظام المدفوعات الإلكترونية</a></td><td><span class="badge badge-green">على المسار</span></td><td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:60px;"><div class="progress-fill pg-green" style="width:91%"></div></div><strong class="v-green">91%</strong></div></td><td><strong class="v-green">93%</strong></td><td><strong class="v-green">89%</strong></td><td>1</td><td>3</td><td>55م</td><td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td></tr>
+              <tr><td><a class="tbl-link" onclick="showPage('project')">تطبيق الخدمات الذكية</a></td><td><span class="badge badge-mh">متأخر</span></td><td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:60px;"><div class="progress-fill pg-amber" style="width:68%"></div></div><strong class="v-amber">68%</strong></div></td><td><strong class="v-amber">65%</strong></td><td><strong class="v-amber">70%</strong></td><td>0</td><td>6</td><td>50م</td><td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td></tr>
+              <tr><td><a class="tbl-link" onclick="showPage('project')">بنية التكامل المؤسسي</a></td><td><span class="badge badge-green">على المسار</span></td><td><div style="display:flex;align-items:center;gap:6px;"><div class="progress-wrap" style="width:60px;"><div class="progress-fill pg-green" style="width:74%"></div></div><strong class="v-green">74%</strong></div></td><td><strong class="v-green">78%</strong></td><td><strong class="v-green">77%</strong></td><td>0</td><td>4</td><td>35م</td><td><a class="tbl-link" onclick="showPage('project')">عرض ←</a></td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <!-- مخاطر + الميزانية + مهام -->
     <div class="section">
-      <div class="section-label">المخاطر والميزانية والمعالم الرئيسية</div>
-      <div class="grid3">
-
+      <div class="section-label">ج — قسم المخاطر والتحديات على مستوى البرنامج</div>
+      <div class="grid2">
         <div class="card accent-red">
-          <div class="card-header">
-            <div class="card-icon ci-red">⚑</div>
-            <div><div class="card-title">مخاطر البرنامج</div><div class="card-sub">6 مخاطر مفتوحة</div></div>
-          </div>
-          <div class="risk-row"><div style="flex:1;"><div class="risk-name">عدم توافر API من الجهة الخارجية</div><div class="risk-meta">يؤثر على مشروعين</div></div><span class="badge badge-hh">عالي</span></div>
-          <div class="risk-row"><div style="flex:1;"><div class="risk-name">تأخر بيئة الاختبار</div><div class="risk-meta">تأخر أسبوعين في الاختبار</div></div><span class="badge badge-mh">متوسط</span></div>
-          <div class="risk-row"><div style="flex:1;"><div class="risk-name">تغيير متطلبات أصحاب المصلحة</div><div class="risk-meta">3 تعديلات جوهرية معلقة</div></div><span class="badge badge-mh">متوسط</span></div>
+          <div class="card-header"><div class="card-icon ci-red">⚑</div><div><div class="card-title">مخاطر البرنامج المشتركة والحرجة</div><div class="card-sub">المخاطر المؤثرة على أكثر من مشروع — التحديات المشتركة</div></div></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">عدم توافر API من الجهة الخارجية</div><div class="risk-meta">يؤثر على: بوابة الخدمات + التوقيع الإلكتروني</div></div><span class="badge badge-hh">عالي</span></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">تأخر بيئة الاختبار المشتركة</div><div class="risk-meta">يؤثر على 4 مشاريع — تأخر أسبوعين</div></div><span class="badge badge-mh">متوسط</span></div>
+          <div class="risk-row"><div class="risk-info"><div class="risk-name">تغيير متطلبات أصحاب المصلحة</div><div class="risk-meta">3 تعديلات جوهرية — تأثير على الجدول</div></div><span class="badge badge-mh">متوسط</span></div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;">التحديات المشتركة — المفتوحة والمعالجة</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--red);"></div><span class="task-name">تنسيق بروتوكولات الأمان بين المشاريع</span><span class="badge badge-hh" style="font-size:9px;">مفتوح</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">اعتماد الأمن المعلوماتي لـ 3 مشاريع</span><span class="badge badge-mh" style="font-size:9px;">جارٍ</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><span class="task-name">توحيد معايير واجهة المستخدم</span><span class="badge badge-green" style="font-size:9px;">مغلق ✓</span></div>
         </div>
+      </div>
+    </div>
 
+    <div class="section">
+      <div class="section-label">د — قسم الاعتماديات</div>
+      <div class="card accent-amber">
+        <div class="card-header"><div class="card-icon ci-amber">↔</div><div><div class="card-title">الاعتماديات بين المشاريع</div><div class="card-sub">الاعتماديات — المشاريع المتأثرة — درجة التأثير — حالة الاعتمادية — التأخير المتوقع</div></div></div>
+        <div style="overflow-x:auto;">
+          <table class="tbl">
+            <thead><tr><th>الاعتمادية</th><th>المشروع المتأثر</th><th>درجة التأثير</th><th>حالة الاعتمادية</th><th>التأخير المتوقع</th></tr></thead>
+            <tbody>
+              <tr><td>بوابة الخدمات → المدفوعات</td><td>المدفوعات</td><td><span class="badge badge-green">منخفض</span></td><td><span class="badge badge-green">محلول</span></td><td>—</td></tr>
+              <tr><td>بنية التكامل → جميع المشاريع</td><td>4 مشاريع</td><td><span class="badge badge-hh">عالي</span></td><td><span class="badge badge-mh">قيد العمل</span></td><td>أسبوعان</td></tr>
+              <tr><td>التوقيع الإلكتروني → الوثائق</td><td>الوثائق</td><td><span class="badge badge-mh">متوسط</span></td><td><span class="badge badge-hh">معلق</span></td><td>3 أسابيع</td></tr>
+              <tr><td>API خارجي → بوابة + توقيع</td><td>2 مشاريع</td><td><span class="badge badge-hh">عالي</span></td><td><span class="badge badge-hh">معلق</span></td><td>4 أسابيع</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">هـ — قسم الميزانية والصرف</div>
+      <div class="grid2">
         <div class="card accent-green">
-          <div class="card-header">
-            <div class="card-icon ci-green">＄</div>
-            <div><div class="card-title">الميزانية والإنفاق</div><div class="card-sub">مليون ريال</div></div>
-          </div>
-          <div class="chart-wrap" style="height:180px;">
-            <canvas id="progBudgetBar"></canvas>
-          </div>
-          <div class="totals-row">
-            <div class="total-card"><div class="total-lbl">الميزانية الكلية</div><div class="total-val">245م</div></div>
-            <div class="total-card"><div class="total-lbl">الإنفاق الفعلي</div><div class="total-val v-green">198م</div></div>
-          </div>
+          <div class="card-header"><div class="card-icon ci-green">＄</div><div><div class="card-title">الميزانية والصرف — مقارنة بين المشاريع</div><div class="card-sub">ميزانية البرنامج — الصرف المخطط — الصرف الفعلي — الانحراف المالي</div></div></div>
+          <div class="chart-wrap" style="height:175px;"><canvas id="progBudgetBar"></canvas></div>
+          <div class="totals-row"><div class="total-card"><div class="total-lbl">الميزانية الكلية</div><div class="total-val">245م</div></div><div class="total-card"><div class="total-lbl">الإنفاق الفعلي</div><div class="total-val v-green">198م</div></div></div>
+          <div class="stat-row" style="margin-top:10px;"><span class="stat-label">الصرف المخطط</span><strong class="v-blue">210م</strong></div>
+          <div class="stat-row"><span class="stat-label">الانحراف المالي</span><strong class="v-red">−12م</strong></div>
+          <div class="stat-row"><span class="stat-label">نسبة الصرف</span><strong class="v-amber">80.8%</strong></div>
         </div>
+        <div class="card accent-blue">
+          <div class="card-header"><div class="card-icon ci-blue">＄</div><div><div class="card-title">مقارنة الميزانية بين المشاريع</div><div class="card-sub">الصرف الفعلي لكل مشروع من ميزانيته</div></div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">بوابة الخدمات</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:87%;background:var(--green);"></div></div></div><div class="pillar-pct v-green">87%</div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">نظام إدارة الوثائق</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:94%;background:var(--green);"></div></div></div><div class="pillar-pct v-green">94%</div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">منصة التوقيع الإلكتروني</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:68%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">68%</div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">نظام المدفوعات</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:85%;background:var(--green);"></div></div></div><div class="pillar-pct v-green">85%</div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">تطبيق الخدمات الذكية</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:72%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">72%</div></div>
+          <div class="pillar-row"><div class="pillar-info"><div class="pillar-name">بنية التكامل</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:77%;background:var(--amber);"></div></div></div><div class="pillar-pct v-amber">77%</div></div>
+        </div>
+      </div>
+    </div>
 
+    <div class="section">
+      <div class="section-label">و — قسم المهام المعلقة والمعالم</div>
+      <div class="grid2">
         <div class="card accent-purple">
-          <div class="card-header">
-            <div class="card-icon ci-purple">◈</div>
-            <div><div class="card-title">المعالم الرئيسية</div><div class="card-sub">18 معلماً — 14 مكتملاً</div></div>
-          </div>
+          <div class="card-header"><div class="card-icon ci-purple">◈</div><div><div class="card-title">المهام والمعالم — القادمة والمتأخرة والمشاريع المتأخرة</div><div class="card-sub">23 مهمة معلقة — 4 معالم قادمة</div></div></div>
           <div class="milestone-item"><div class="ms-icon ms-done">✓</div><div><div class="ms-title">إطلاق بوابة الخدمات — المرحلة 1</div><div class="ms-date">مكتمل — مارس 2026</div></div></div>
           <div class="milestone-item"><div class="ms-icon ms-done">✓</div><div><div class="ms-title">تكامل نظام المدفوعات</div><div class="ms-date">مكتمل — فبراير 2026</div></div></div>
           <div class="milestone-item"><div class="ms-icon ms-pend">⏳</div><div><div class="ms-title">إطلاق التوقيع الإلكتروني</div><div class="ms-date">مستهدف — مايو 2026</div></div></div>
-          <div class="milestone-item"><div class="ms-icon ms-pend">⏳</div><div><div class="ms-title">تكامل بنية API المؤسسية</div><div class="ms-date">مستهدف — يونيو 2026</div></div></div>
-          <div class="milestone-item"><div class="ms-icon ms-late">!</div><div><div class="ms-title">اختبار القبول الشامل</div><div class="ms-date">متأخر — كان مايو، الآن يونيو</div></div></div>
+          <div class="milestone-item"><div class="ms-icon ms-late">!</div><div><div class="ms-title">اختبار القبول الشامل — متأخر</div><div class="ms-date">كان مايو، الآن يونيو 2026</div></div></div>
+          <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;">المهام الحرجة المعلقة</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--red);"></div><span class="task-name">اختبار القبول — التوقيع الإلكتروني</span><span class="task-date" style="color:var(--red);">متأخر</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">توثيق متطلبات API الخارجي</span><span class="task-date">15 مايو</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">تسليم نموذج الحوكمة للبنية</span><span class="task-date">20 مايو</span></div>
         </div>
       </div>
     </div>
@@ -1210,152 +650,134 @@ body {
   </div>
 </div>
 
-<!-- ================================================================
-     PAGE: PROJECT
-================================================================ -->
+<!-- ==================== PROJECT ==================== -->
 <div id="page-project" class="page-section">
-
   <div class="header-strip">
-    <div>
-      <div class="page-title">لوحة المشروع — بوابة الخدمات الحكومية</div>
-      <div class="page-sub">ملخص تنفيذي تفصيلي | برنامج الحكومة الإلكترونية | محفظة التحول الرقمي</div>
-    </div>
-    <div class="header-pills">
-      <span class="pill pill-green">88% إنجاز</span>
-      <span class="pill pill-green">على المسار</span>
-      <span class="pill pill-blue">45م ريال</span>
-    </div>
+    <div><div class="page-title">لوحة المشروع — بوابة الخدمات الحكومية</div><div class="page-sub">ملخص تنفيذي تشغيلي | برنامج الحكومة الإلكترونية | محفظة التحول الرقمي</div></div>
+    <div class="header-pills"><span class="pill pill-green">88% إنجاز</span><span class="pill pill-green">على المسار</span><span class="pill pill-blue">45م ريال</span></div>
   </div>
-
   <div class="content">
 
-    <!-- ملخص تنفيذي -->
     <div class="section">
-      <div class="section-label">الملخص التنفيذي للمشروع</div>
-      <div class="kpi-grid kpi-grid-4">
-        <div class="kpi-card accent-green"><div class="kpi-label">نسبة الإنجاز</div><div class="kpi-val v-green">88%</div><div class="kpi-sub">من نطاق العمل الكلي</div></div>
-        <div class="kpi-card accent-blue"><div class="kpi-label">تاريخ الانتهاء</div><div class="kpi-val v-blue" style="font-size:18px;">يونيو 2026</div><div class="kpi-sub">حسب الجدول المحدّث</div></div>
-        <div class="kpi-card accent-green"><div class="kpi-label">الإنفاق</div><div class="kpi-val v-green" style="font-size:22px;">39م</div><div class="kpi-sub">من 45م ميزانية معتمدة</div></div>
-        <div class="kpi-card accent-amber"><div class="kpi-label">المخاطر</div><div class="kpi-val v-amber">2</div><div class="kpi-sub">خطر مفتوح — متوسط التأثير</div></div>
+      <div class="section-label">أ — الشريط العلوي: ملخص تنفيذي</div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(6,1fr);">
+        <div class="kpi-card accent-red"><div class="kpi-label">المخاطر</div><div class="kpi-val v-red">2</div><div class="kpi-sub">خطران مفتوحان</div></div>
+        <div class="kpi-card accent-amber"><div class="kpi-label">التحديات</div><div class="kpi-val v-amber">3</div><div class="kpi-sub">2 مفتوحة، 1 مغلقة</div></div>
+        <div class="kpi-card accent-blue"><div class="kpi-label">المخرجات</div><div class="kpi-val v-blue">8</div><div class="kpi-sub">6 منجزة، 2 قيد التنفيذ</div></div>
+        <div class="kpi-card accent-green"><div class="kpi-label">المعالم</div><div class="kpi-val v-green">5</div><div class="kpi-sub">3 مكتملة، 2 قادمة</div></div>
+        <div class="kpi-card accent-green"><div class="kpi-label">الحالة العامة</div><div class="kpi-val" style="font-size:16px;color:var(--green);margin-top:6px;">🟢 أخضر</div><div class="kpi-sub">على المسار</div></div>
+        <div class="kpi-card accent-green"><div class="kpi-label">الالتزام العام</div><div class="kpi-val v-green">90%</div><div class="kpi-sub">مستوى الالتزام</div></div>
       </div>
     </div>
 
-    <!-- صحة المشروع + مؤشرات -->
     <div class="section">
-      <div class="section-label">صحة المشروع ومؤشرات الأداء الرئيسية</div>
-      <div class="grid2">
-
+      <div class="section-label">ب — قسم صحة المشروع</div>
+      <div class="grid-1-2">
         <div class="card accent-green">
-          <div class="card-header">
-            <div class="card-icon ci-green">◈</div>
-            <div><div class="card-title">صحة المشروع الشاملة</div><div class="card-sub">Project Health Overview</div></div>
-          </div>
-          <div class="pie-area">
-            <div class="pie-wrap" style="width:130px; height:130px;">
-              <canvas id="projHealthPie"></canvas>
-            </div>
-            <div class="pie-legend">
-              <div class="pie-legend-row"><div class="pie-dot" style="background:var(--green);"></div><span class="pie-lbl">مكتملة</span><span class="pie-val v-green">62%</span></div>
-              <div class="pie-legend-row"><div class="pie-dot" style="background:var(--blue);"></div><span class="pie-lbl">جارية</span><span class="pie-val v-blue">26%</span></div>
-              <div class="pie-legend-row"><div class="pie-dot" style="background:var(--amber);"></div><span class="pie-lbl">معلقة</span><span class="pie-val v-amber">12%</span></div>
-            </div>
-          </div>
-          <div style="margin-top:16px;">
-            <div class="pillar-row">
-              <div class="pillar-info"><div class="pillar-name">النطاق (Scope)</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:92%; background:var(--green);"></div></div></div>
-              <div class="pillar-pct v-green">92%</div>
-            </div>
-            <div class="pillar-row">
-              <div class="pillar-info"><div class="pillar-name">الجدول الزمني (Schedule)</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:85%; background:var(--green);"></div></div></div>
-              <div class="pillar-pct v-green">85%</div>
-            </div>
-            <div class="pillar-row">
-              <div class="pillar-info"><div class="pillar-name">التكلفة (Cost)</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:87%; background:var(--green);"></div></div></div>
-              <div class="pillar-pct v-green">87%</div>
-            </div>
-            <div class="pillar-row">
-              <div class="pillar-info"><div class="pillar-name">الجودة (Quality)</div><div class="pillar-bar-wrap"><div class="pillar-bar-fill" style="width:78%; background:var(--amber);"></div></div></div>
-              <div class="pillar-pct v-amber">78%</div>
+          <div class="card-header"><div class="card-icon ci-green">◈</div><div><div class="card-title">مؤشرات صحة المشروع</div><div class="card-sub">الإنجاز، الزمني، المالي، المخرجات، الحالة أخضر/أصفر/أحمر</div></div></div>
+          <div class="stat-row"><span class="stat-label">نسبة الإنجاز</span><div style="display:flex;align-items:center;gap:8px;"><div class="progress-wrap" style="width:80px;"><div class="progress-fill pg-green" style="width:88%"></div></div><strong class="v-green">88%</strong></div></div>
+          <div class="stat-row"><span class="stat-label">الالتزام الزمني</span><div style="display:flex;align-items:center;gap:8px;"><div class="progress-wrap" style="width:80px;"><div class="progress-fill pg-green" style="width:85%"></div></div><strong class="v-green">85%</strong></div></div>
+          <div class="stat-row"><span class="stat-label">الالتزام المالي</span><div style="display:flex;align-items:center;gap:8px;"><div class="progress-wrap" style="width:80px;"><div class="progress-fill pg-green" style="width:87%"></div></div><strong class="v-green">87%</strong></div></div>
+          <div class="stat-row"><span class="stat-label">الالتزام بالمخرجات</span><div style="display:flex;align-items:center;gap:8px;"><div class="progress-wrap" style="width:80px;"><div class="progress-fill pg-amber" style="width:75%"></div></div><strong class="v-amber">75%</strong></div></div>
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+              <div style="text-align:center;padding:10px 6px;background:var(--green-pale);border-radius:var(--radius);border:1px solid #b2d4bc;"><div style="font-size:20px;">🟢</div><div style="font-size:10px;color:var(--green-mid);margin-top:4px;">الجدول</div></div>
+              <div style="text-align:center;padding:10px 6px;background:var(--green-pale);border-radius:var(--radius);border:1px solid #b2d4bc;"><div style="font-size:20px;">🟢</div><div style="font-size:10px;color:var(--green-mid);margin-top:4px;">الميزانية</div></div>
+              <div style="text-align:center;padding:10px 6px;background:var(--amber-bg);border-radius:var(--radius);border:1px solid var(--amber-border);"><div style="font-size:20px;">🟡</div><div style="font-size:10px;color:var(--amber);margin-top:4px;">الجودة</div></div>
             </div>
           </div>
         </div>
-
-        <!-- مؤشرات EVM -->
         <div class="card accent-blue">
-          <div class="card-header">
-            <div class="card-icon ci-blue">▦</div>
-            <div><div class="card-title">مؤشرات قيمة المكتسب (EVM)</div><div class="card-sub">Earned Value Management</div></div>
-          </div>
-          <div class="chart-wrap" style="height:200px;">
-            <canvas id="projEvmLine"></canvas>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:14px; padding-top:12px; border-top:1px solid var(--border);">
-            <div style="text-align:center; padding:10px 6px; background:var(--green-pale); border-radius:var(--radius); border:1px solid #b2d4bc;">
-              <div style="font-size:18px; font-weight:700; color:var(--green);">0.94</div>
-              <div style="font-size:10px; color:var(--green-mid); margin-top:2px;">SPI — الجدول</div>
-            </div>
-            <div style="text-align:center; padding:10px 6px; background:var(--blue-pale); border-radius:var(--radius); border:1px solid #b2cfe8;">
-              <div style="font-size:18px; font-weight:700; color:var(--blue);">1.02</div>
-              <div style="font-size:10px; color:var(--blue-mid); margin-top:2px;">CPI — التكلفة</div>
-            </div>
-            <div style="text-align:center; padding:10px 6px; background:var(--purple-pale); border-radius:var(--radius); border:1px solid #c4b4d8;">
-              <div style="font-size:18px; font-weight:700; color:var(--purple);">+2م</div>
-              <div style="font-size:10px; color:var(--purple-mid); margin-top:2px;">CV — فرق التكلفة</div>
-            </div>
+          <div class="card-header"><div class="card-icon ci-blue">▦</div><div><div class="card-title">مؤشرات قيمة المكتسب EVM</div><div class="card-sub">PV — EV — AC عبر الزمن</div></div></div>
+          <div class="chart-wrap" style="height:190px;"><canvas id="projEvmLine"></canvas></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+            <div style="text-align:center;padding:10px 6px;background:var(--green-pale);border-radius:var(--radius);border:1px solid #b2d4bc;"><div style="font-size:18px;font-weight:700;color:var(--green);">0.94</div><div style="font-size:10px;color:var(--green-mid);margin-top:2px;">SPI — الجدول</div></div>
+            <div style="text-align:center;padding:10px 6px;background:var(--blue-pale);border-radius:var(--radius);border:1px solid #b2cfe8;"><div style="font-size:18px;font-weight:700;color:var(--blue);">1.02</div><div style="font-size:10px;color:var(--blue-mid);margin-top:2px;">CPI — التكلفة</div></div>
+            <div style="text-align:center;padding:10px 6px;background:var(--purple-pale);border-radius:var(--radius);border:1px solid #c4b4d8;"><div style="font-size:18px;font-weight:700;color:var(--purple);">+2م</div><div style="font-size:10px;color:var(--purple-mid);margin-top:2px;">CV — فرق التكلفة</div></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- مخاطر + ميزانية + مهام -->
     <div class="section">
-      <div class="section-label">المخاطر والميزانية والمهام والمعالم</div>
-      <div class="grid3">
-
-        <div class="card accent-red">
-          <div class="card-header">
-            <div class="card-icon ci-red">⚑</div>
-            <div><div class="card-title">مخاطر المشروع وتحدياته</div><div class="card-sub">2 مخاطر — 3 تحديات</div></div>
-          </div>
-          <div class="risk-row"><div style="flex:1;"><div class="risk-name">تأخر تسليم الـ API من المورد الخارجي</div><div class="risk-meta">يؤثر على مرحلة التكامل</div></div><span class="badge badge-mh">متوسط</span></div>
-          <div class="risk-row"><div style="flex:1;"><div class="risk-name">تعديلات واجهة المستخدم بناءً على الاختبار</div><div class="risk-meta">قد تمتد الجدول 5 أيام</div></div><span class="badge badge-mh">متوسط</span></div>
-          <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border); font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px;">التحديات</div>
-          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">تنسيق مع 3 جهات حكومية</span><span class="badge badge-mh" style="font-size:9px;">جارٍ</span></div>
-          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">إجراءات اعتماد الأمن المعلوماتي</span><span class="badge badge-mh" style="font-size:9px;">معلق</span></div>
-          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><span class="task-name">الموافقة على متطلبات إمكانية الوصول</span><span class="badge badge-green" style="font-size:9px;">مكتمل</span></div>
+      <div class="section-label">ج — قسم المخاطر والتحديات</div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-red">⚑</div><div><div class="card-title">قائمة المخاطر التفصيلية</div><div class="card-sub">الحالة، التأثير، الاحتمالية، الإجراء التصحيحي، مالك الخطر — التحديات المفتوحة والمغلقة</div></div></div>
+        <div style="overflow-x:auto;">
+          <table class="tbl">
+            <thead><tr><th>المخاطرة</th><th>الحالة</th><th>مستوى التأثير</th><th>الاحتمالية</th><th>الإجراء التصحيحي</th><th>مالك الخطر</th></tr></thead>
+            <tbody>
+              <tr><td><strong>تأخر تسليم API من المورد الخارجي</strong></td><td><span class="badge badge-hh">مفتوح</span></td><td><span class="badge badge-mh">متوسط</span></td><td><span class="badge badge-mh">متوسط</span></td><td>التواصل مع المورد وتفعيل بند الغرامات التعاقدية</td><td>أ. محمد علي</td></tr>
+              <tr><td><strong>تعديلات واجهة المستخدم بعد الاختبار</strong></td><td><span class="badge badge-mh">قيد المعالجة</span></td><td><span class="badge badge-green">منخفض</span></td><td><span class="badge badge-mh">متوسط</span></td><td>تخصيص ساعات إضافية لفريق التطوير</td><td>أ. رنا الحربي</td></tr>
+            </tbody>
+          </table>
         </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);margin-bottom:10px;">التحديات المفتوحة والمغلقة</div>
+        <div class="task-row"><div class="task-dot" style="background:var(--red);"></div><span class="task-name">تنسيق مع 3 جهات حكومية لاعتماد البروتوكولات</span><span class="badge badge-hh" style="font-size:9px;">مفتوح</span></div>
+        <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">إجراءات اعتماد الأمن المعلوماتي</span><span class="badge badge-mh" style="font-size:9px;">جارٍ</span></div>
+        <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><span class="task-name">الموافقة على متطلبات إمكانية الوصول</span><span class="badge badge-green" style="font-size:9px;">مغلق ✓</span></div>
+      </div>
+    </div>
 
+    <div class="section">
+      <div class="section-label">د — قسم الميزانية والصرف</div>
+      <div class="grid2">
         <div class="card accent-purple">
-          <div class="card-header">
-            <div class="card-icon ci-purple">＄</div>
-            <div><div class="card-title">الميزانية والإنفاق</div><div class="card-sub">مليون ريال</div></div>
-          </div>
-          <div class="chart-wrap" style="height:160px;">
-            <canvas id="projBudgetDoughnut"></canvas>
-          </div>
-          <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border);">
+          <div class="card-header"><div class="card-icon ci-purple">＄</div><div><div class="card-title">الميزانية والصرف التفصيلي</div><div class="card-sub">المعتمدة، المخطط، الفعلي، الانحراف، نسبة الصرف</div></div></div>
+          <div class="chart-wrap" style="height:150px;"><canvas id="projBudgetDoughnut"></canvas></div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
             <div class="stat-row"><span class="stat-label">الميزانية المعتمدة</span><strong>45م.ر</strong></div>
-            <div class="stat-row"><span class="stat-label">الإنفاق الفعلي</span><strong class="v-green">39م.ر</strong></div>
+            <div class="stat-row"><span class="stat-label">الصرف المخطط حتى الآن</span><strong class="v-blue">41م.ر</strong></div>
+            <div class="stat-row"><span class="stat-label">الصرف الفعلي</span><strong class="v-green">39م.ر</strong></div>
+            <div class="stat-row"><span class="stat-label">الانحراف المالي</span><strong class="v-green">+2م.ر</strong></div>
+            <div class="stat-row"><span class="stat-label">نسبة الصرف إلى الميزانية</span><strong class="v-amber">86.7%</strong></div>
             <div class="stat-row"><span class="stat-label">الاحتياطي المتبقي</span><strong class="v-blue">6م.ر</strong></div>
-            <div class="stat-row"><span class="stat-label">نسبة الاستهلاك</span><strong class="v-amber">86.7%</strong></div>
           </div>
         </div>
-
-        <div class="card accent-amber">
-          <div class="card-header">
-            <div class="card-icon ci-amber">◈</div>
-            <div><div class="card-title">المهام والمعالم</div><div class="card-sub">المستحقة والمكتملة</div></div>
-          </div>
+        <div class="card accent-green">
+          <div class="card-header"><div class="card-icon ci-green">◈</div><div><div class="card-title">المعالم القادمة والمكتملة</div><div class="card-sub">5 معالم — 3 مكتملة، 2 قادمة</div></div></div>
           <div class="milestone-item"><div class="ms-icon ms-done">✓</div><div><div class="ms-title">تحليل المتطلبات والتصميم</div><div class="ms-date">مكتمل — يناير 2026</div></div></div>
-          <div class="milestone-item"><div class="ms-icon ms-done">✓</div><div><div class="ms-title">تطوير الواجهة الأمامية</div><div class="ms-date">مكتمل — مارس 2026</div></div></div>
-          <div class="milestone-item"><div class="ms-icon ms-done">✓</div><div><div class="ms-title">تكامل الدفع الإلكتروني</div><div class="ms-date">مكتمل — أبريل 2026</div></div></div>
+          <div class="milestone-item"><div class="ms-icon ms-done">✓</div><div><div class="ms-title">تطوير الواجهة وتكامل الدفع</div><div class="ms-date">مكتمل — أبريل 2026</div></div></div>
+          <div class="milestone-item"><div class="ms-icon ms-done">✓</div><div><div class="ms-title">اعتماد اختبارات الوحدة</div><div class="ms-date">مكتمل — أبريل 2026</div></div></div>
           <div class="milestone-item"><div class="ms-icon ms-pend">⏳</div><div><div class="ms-title">اختبار القبول وإصلاح العيوب</div><div class="ms-date">مستهدف — مايو 2026</div></div></div>
           <div class="milestone-item"><div class="ms-icon ms-pend">⏳</div><div><div class="ms-title">الإطلاق الرسمي والتشغيل</div><div class="ms-date">مستهدف — يونيو 2026</div></div></div>
-          <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--border);">
-            <div class="task-row"><div class="task-dot" style="background:var(--red);"></div><span class="task-name">كتابة وثيقة قبول المستخدم</span><span class="task-date">مستحق 15 مايو</span></div>
-            <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">مراجعة بروتوكولات الأمان</span><span class="task-date">مستحق 20 مايو</span></div>
-            <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">تدريب فريق الدعم الفني</span><span class="task-date">مستحق 25 مايو</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">هـ — قسم المهام والمخرجات</div>
+      <div class="grid2">
+        <div class="card accent-amber">
+          <div class="card-header"><div class="card-icon ci-amber">⊙</div><div><div class="card-title">المهام المعلقة والمتأخرة</div><div class="card-sub">5 مهام معلقة — 1 متأخرة تجاوزت الموعد</div></div></div>
+          <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:8px;">المهام المتأخرة</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--red);"></div><span class="task-name">مراجعة وثيقة قبول المستخدم النهائي</span><span class="badge badge-hh" style="font-size:9px;">متأخر 5 أيام</span></div>
+          <div style="font-size:11px;font-weight:700;color:var(--amber);margin-top:12px;margin-bottom:8px;">المهام المعلقة القادمة</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">مراجعة بروتوكولات الأمان</span><span class="task-date">مستحق 20 مايو</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">تدريب فريق الدعم الفني</span><span class="task-date">مستحق 25 مايو</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><span class="task-name">إعداد بيئة الإنتاج</span><span class="task-date">مستحق 28 مايو</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--blue);"></div><span class="task-name">مراجعة تقرير الأداء الشهري</span><span class="task-date">مستحق 30 مايو</span></div>
+          <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+            <div class="mini-stat-grid ms3">
+              <div class="ms-cell msc-red"><div class="ms-cell-val v-red">1</div><div class="ms-cell-lbl" style="color:var(--red);">متأخرة</div></div>
+              <div class="ms-cell msc-amber"><div class="ms-cell-val v-amber">4</div><div class="ms-cell-lbl" style="color:var(--amber);">معلقة</div></div>
+              <div class="ms-cell msc-green"><div class="ms-cell-val v-green">12</div><div class="ms-cell-lbl" style="color:var(--green);">منجزة</div></div>
+            </div>
           </div>
+        </div>
+        <div class="card accent-blue">
+          <div class="card-header"><div class="card-icon ci-blue">◈</div><div><div class="card-title">المخرجات قيد التنفيذ والمتأخرة</div><div class="card-sub">8 مخرجات — 6 منجزة، 2 قيد التنفيذ، 1 متأخرة</div></div></div>
+          <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:8px;">المخرجات المتأخرة</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--red);"></div><span class="task-name">دليل تشغيل النظام</span><span class="badge badge-hh" style="font-size:9px;">متأخر 7 أيام</span></div>
+          <div style="font-size:11px;font-weight:700;color:var(--blue);margin-top:12px;margin-bottom:8px;">المخرجات قيد التنفيذ</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--blue);"></div><span class="task-name">وثيقة قبول المستخدم UAT</span><span class="badge badge-blue" style="font-size:9px;">قيد التنفيذ — 75%</span></div>
+          <div style="font-size:11px;font-weight:700;color:var(--green);margin-top:12px;margin-bottom:8px;">المخرجات المنجزة</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><span class="task-name">وثيقة التصميم المعماري</span><span class="badge badge-green" style="font-size:9px;">مكتمل ✓</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><span class="task-name">نماذج الواجهة المعتمدة</span><span class="badge badge-green" style="font-size:9px;">مكتمل ✓</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><span class="task-name">وثيقة اختبار الوحدة</span><span class="badge badge-green" style="font-size:9px;">مكتمل ✓</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><span class="task-name">تقرير اختبار الأداء</span><span class="badge badge-green" style="font-size:9px;">مكتمل ✓</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><span class="task-name">وثيقة إدارة التغيير</span><span class="badge badge-green" style="font-size:9px;">مكتمل ✓</span></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><span class="task-name">خطة الانتقال والتشغيل</span><span class="badge badge-green" style="font-size:9px;">مكتمل ✓</span></div>
         </div>
       </div>
     </div>
@@ -1363,207 +785,65 @@ body {
   </div>
 </div>
 
-<!-- FOOTER -->
 <div class="page-footer">
-  <div class="footer-logo">Ne<span>X</span>era <span style="font-size:10px; font-weight:400; color:var(--muted);">— The Next Era of Empowerment</span></div>
+  <div class="footer-logo">Ne<span>X</span>era <span style="font-size:10px;font-weight:400;color:var(--muted);">— The Next Era of Empowerment</span></div>
   <div class="footer-text">آخر تحديث: أبريل 2026</div>
 </div>
 
 <script>
-// ======================== NAV ========================
-const pages = ['pmo','portfolio','program','project'];
-const pageTitles = {
-  pmo: 'لوحة مكتب إدارة المشاريع — PMO',
-  portfolio: 'PMO ← المحفظة',
-  program: 'PMO ← المحفظة ← البرنامج',
-  project: 'PMO ← المحفظة ← البرنامج ← المشروع'
-};
-const topbarLabels = {
-  pmo: 'لوحة مكتب إدارة المشاريع — PMO',
-  portfolio: 'لوحة المحفظة',
-  program: 'لوحة البرنامج',
-  project: 'لوحة المشروع'
-};
-
-let chartsInitialized = {};
-
-function showPage(name) {
-  pages.forEach(p => {
-    document.getElementById('page-' + p).classList.toggle('active', p === name);
-  });
-  document.querySelectorAll('.nav-tab').forEach((t, i) => {
-    t.classList.toggle('active', pages[i] === name);
-  });
-  document.getElementById('breadcrumb').innerHTML = pageTitles[name];
-  document.getElementById('topbar-label').textContent = topbarLabels[name];
-
-  if (!chartsInitialized[name]) {
-    chartsInitialized[name] = true;
-    setTimeout(() => initCharts(name), 50);
+function toggleAdv(){
+  const d=document.getElementById('advFilters');
+  const b=document.getElementById('advBtn');
+  d.classList.toggle('open');
+  b.classList.toggle('open');
+}
+function updateAdvCount(){
+  const selects=document.querySelectorAll('#advFilters .adv-select');
+  let active=0;
+  selects.forEach(s=>{if(s.value!==s.options[0].value)active++;});
+  const el=document.getElementById('advCount');
+  el.textContent=active;
+  el.classList.toggle('show',active>0);
+}
+function resetFilters(){
+  document.querySelectorAll('.filter-chip-select,.adv-select').forEach(s=>s.selectedIndex=0);
+  updateAdvCount();
+}
+const pages=['pmo','portfolio','program','project'];
+const topbarLabels={pmo:'لوحة مكتب إدارة المشاريع — PMO',portfolio:'لوحة المحفظة',program:'لوحة البرنامج',project:'لوحة المشروع'};
+const breadcrumbs={pmo:'الرئيسية',portfolio:'PMO ← المحفظة',program:'PMO ← المحفظة ← البرنامج',project:'PMO ← المحفظة ← البرنامج ← المشروع'};
+let initialized={};
+function showPage(name){
+  pages.forEach(p=>{document.getElementById('page-'+p).classList.toggle('active',p===name);});
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>{t.classList.toggle('active',pages[i]===name);});
+  document.getElementById('breadcrumb').textContent=breadcrumbs[name];
+  document.getElementById('topbar-label').textContent=topbarLabels[name];
+  if(!initialized[name]){initialized[name]=true;setTimeout(()=>initCharts(name),60);}
+}
+const C={g:'#306C45',gp:'#D9ECDB',b:'#2980BE',bm:'#5D92C9',bp:'#D0DBEE',p:'#805CA5',pp:'#DBD4E9',r:'#c0392b',rb:'#fdf0ee',a:'#b7770d',ab:'#fdf6e3',mu:'#5a6478',hi:'#9aa3b2',bo:'#e2e6ec'};
+const co=(ex={})=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{bodyFont:{family:'Cairo'},titleFont:{family:'Cairo'}}},...ex});
+const axX={ticks:{font:{size:10,family:'Cairo'},color:C.mu},grid:{display:false}};
+const axY=(cb=v=>v+'%')=>({ticks:{font:{size:10,family:'Cairo'},color:C.hi,callback:cb},grid:{color:'rgba(0,0,0,0.05)'}});
+function initCharts(name){
+  if(name==='pmo'){
+    new Chart(document.getElementById('pmoCompareBar'),{type:'bar',data:{labels:['تحول رقمي','بنية تحتية','صحة رقمية','التعليم','الخدمات'],datasets:[{label:'الالتزام %',data:[68,85,44,79,61],backgroundColor:'rgba(48,108,69,0.75)',borderColor:C.g,borderWidth:1.5,borderRadius:5,borderSkipped:false},{label:'الإنجاز %',data:[64,82,40,76,58],backgroundColor:'rgba(41,128,190,0.7)',borderColor:C.b,borderWidth:1.5,borderRadius:5,borderSkipped:false}]},options:{...co({plugins:{legend:{display:true,position:'top',labels:{font:{family:'Cairo',size:10},color:C.mu,boxWidth:10}}}}),scales:{x:axX,y:axY()}}});
+    new Chart(document.getElementById('pmoBudgetBar'),{type:'bar',data:{labels:['تحول رقمي','بنية تحتية','صحة رقمية','التعليم','الخدمات'],datasets:[{label:'المخطط',data:[980,600,420,370,160],backgroundColor:'rgba(93,146,201,0.3)',borderColor:C.bm,borderWidth:1.5,borderRadius:5,borderSkipped:false},{label:'الفعلي',data:[720,510,180,290,95],backgroundColor:[C.a,C.g,C.r,C.g,C.a],borderWidth:1.5,borderRadius:5,borderSkipped:false}]},options:{...co(),scales:{x:axX,y:axY(v=>v+'م')}}});
+    const vd=[-260,-90,-240,-80,-65];
+    new Chart(document.getElementById('pmoVarianceBar'),{type:'bar',data:{labels:['تحول رقمي','بنية تحتية','صحة رقمية','التعليم','الخدمات'],datasets:[{data:vd,backgroundColor:vd.map(v=>v<0?'rgba(192,57,43,0.75)':'rgba(48,108,69,0.75)'),borderColor:vd.map(v=>v<0?C.r:C.g),borderWidth:1.5,borderRadius:5,borderSkipped:false}]},options:{...co(),scales:{x:axX,y:axY(v=>v+'م')}}});
+  }
+  if(name==='portfolio'){
+    new Chart(document.getElementById('portPie'),{type:'doughnut',data:{labels:['سليم','متأخرة','حرج','مكتملة'],datasets:[{data:[9,8,4,1],backgroundColor:[C.g,C.a,C.r,C.b],borderColor:[C.gp,C.ab,C.rb,C.bp],borderWidth:3,hoverOffset:6}]},options:{...co(),cutout:'65%'}});
+    new Chart(document.getElementById('portBudgetBar'),{type:'bar',data:{labels:['حكومة إلكترونية','بيانات وطنية','أمن سيبراني','تحول سحابي','ذكاء اصطناعي'],datasets:[{label:'المخطط',data:[245,200,210,200,125],backgroundColor:'rgba(93,146,201,0.3)',borderColor:C.bm,borderWidth:1.5,borderRadius:5,borderSkipped:false},{label:'الفعلي',data:[198,120,95,148,69],backgroundColor:[C.g,C.a,C.r,C.a,C.a],borderWidth:1.5,borderRadius:5,borderSkipped:false}]},options:{...co(),scales:{x:axX,y:axY(v=>v+'م')}}});
+  }
+  if(name==='program'){
+    new Chart(document.getElementById('progBudgetBar'),{type:'bar',data:{labels:['بوابة','وثائق','توقيع','مدفوعات','تطبيق','تكامل'],datasets:[{label:'المخطط',data:[45,32,28,55,50,35],backgroundColor:'rgba(93,146,201,0.3)',borderColor:C.bm,borderWidth:1.5,borderRadius:4,borderSkipped:false},{label:'الفعلي',data:[39,30,19,47,36,27],backgroundColor:[C.g,C.g,C.a,C.g,C.a,C.g],borderWidth:1.5,borderRadius:4,borderSkipped:false}]},options:{...co(),scales:{x:axX,y:axY(v=>v+'م')}}});
+  }
+  if(name==='project'){
+    new Chart(document.getElementById('projEvmLine'),{type:'line',data:{labels:['يناير','فبراير','مارس','أبريل','مايو','يونيو'],datasets:[{label:'القيمة المخططة PV',data:[5,12,20,30,39,45],borderColor:C.bm,backgroundColor:'rgba(93,146,201,0.1)',fill:true,tension:0.4,pointRadius:4,borderWidth:2},{label:'القيمة المكتسبة EV',data:[5,11,19,28,null,null],borderColor:C.g,backgroundColor:'rgba(48,108,69,0.08)',fill:true,tension:0.4,pointRadius:4,borderWidth:2},{label:'التكلفة الفعلية AC',data:[4,10,18,27,null,null],borderColor:C.a,backgroundColor:'transparent',tension:0.4,pointRadius:4,borderWidth:2,borderDash:[4,3]}]},options:{...co({plugins:{legend:{display:true,position:'top',labels:{font:{family:'Cairo',size:10},color:C.mu,boxWidth:10}}}}),scales:{x:axX,y:axY(v=>v+'م')}}});
+    new Chart(document.getElementById('projBudgetDoughnut'),{type:'doughnut',data:{labels:['الإنفاق الفعلي','الاحتياطي المتبقي'],datasets:[{data:[39,6],backgroundColor:[C.g,C.gp],borderColor:[C.gp,C.bo],borderWidth:2,hoverOffset:4}]},options:{...co(),cutout:'70%'}});
   }
 }
-
-// ======================== CHARTS ========================
-const COLORS = {
-  green: '#306C45', greenPale: '#D9ECDB',
-  blue: '#2980BE', blueMid: '#5D92C9', bluePale: '#D0DBEE',
-  purple: '#805CA5', purplePale: '#DBD4E9',
-  red: '#c0392b', redBg: '#fdf0ee',
-  amber: '#b7770d', amberBg: '#fdf6e3',
-  muted: '#5a6478', hint: '#9aa3b2', border: '#e2e6ec'
-};
-
-function chartDefaults(ctx) {
-  return { responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { bodyFont: { family: 'Cairo' }, titleFont: { family: 'Cairo' } } } };
-}
-
-function axisStyle() {
-  return {
-    x: { ticks: { font: { size: 10, family: 'Cairo' }, color: COLORS.muted }, grid: { display: false } },
-    y: { ticks: { font: { size: 10, family: 'Cairo' }, color: COLORS.hint, callback: v => v + '%' }, grid: { color: 'rgba(0,0,0,0.05)' } }
-  };
-}
-
-function initCharts(name) {
-  if (name === 'pmo') {
-    // Grouped bar — budgets
-    new Chart(document.getElementById('pmoBudgetBar'), {
-      type: 'bar',
-      data: {
-        labels: ['تحول رقمي', 'بنية تحتية', 'صحة رقمية', 'تعليم', 'خدمات'],
-        datasets: [
-          { label: 'المخطط', data: [980, 600, 420, 370, 160],
-            backgroundColor: 'rgba(93,146,201,0.3)', borderColor: COLORS.blueMid, borderWidth: 1.5, borderRadius: 5, borderSkipped: false },
-          { label: 'الفعلي', data: [720, 510, 180, 290, 95],
-            backgroundColor: [COLORS.amber, COLORS.green, COLORS.red, COLORS.green, COLORS.amber],
-            borderColor: [COLORS.amberBg, COLORS.greenPale, COLORS.redBg, COLORS.greenPale, COLORS.amberBg],
-            borderWidth: 1.5, borderRadius: 5, borderSkipped: false }
-        ]
-      },
-      options: { ...chartDefaults(), scales: { x: axisStyle().x, y: { ...axisStyle().y, ticks: { ...axisStyle().y.ticks, callback: v => v + 'م' } } } }
-    });
-
-    // PMO Pie
-    new Chart(document.getElementById('pmoPie'), {
-      type: 'doughnut',
-      data: {
-        labels: ['على المسار', 'متأخرة', 'متعثرة', 'مكتملة'],
-        datasets: [{ data: [32, 24, 11, 7],
-          backgroundColor: [COLORS.green, COLORS.amber, COLORS.red, COLORS.blue],
-          borderColor: [COLORS.greenPale, COLORS.amberBg, COLORS.redBg, COLORS.bluePale],
-          borderWidth: 3, hoverOffset: 6 }]
-      },
-      options: { ...chartDefaults(), cutout: '65%', plugins: { legend: { display: false } } }
-    });
-
-    // Radar chart — comparative
-    new Chart(document.getElementById('pmoRadarChart'), {
-      type: 'bar',
-      data: {
-        labels: ['الالتزام%', 'الإنجاز%', 'التنفيذ مالياً%', 'غياب مخاطر'],
-        datasets: [
-          { label: 'تحول رقمي', data: [68, 64, 73, 60], backgroundColor: 'rgba(48,108,69,0.7)', borderColor: COLORS.green, borderWidth: 1.5, borderRadius: 4, borderSkipped: false },
-          { label: 'بنية تحتية', data: [85, 82, 85, 78], backgroundColor: 'rgba(41,128,190,0.7)', borderColor: COLORS.blue, borderWidth: 1.5, borderRadius: 4, borderSkipped: false },
-          { label: 'صحة رقمية', data: [44, 40, 43, 30], backgroundColor: 'rgba(192,57,43,0.7)', borderColor: COLORS.red, borderWidth: 1.5, borderRadius: 4, borderSkipped: false }
-        ]
-      },
-      options: {
-        ...chartDefaults(),
-        scales: axisStyle(),
-        plugins: { legend: { display: true, position: 'top', labels: { font: { family: 'Cairo', size: 10 }, color: COLORS.muted, boxWidth: 10 } } }
-      }
-    });
-  }
-
-  if (name === 'portfolio') {
-    new Chart(document.getElementById('portPie'), {
-      type: 'doughnut',
-      data: {
-        labels: ['على المسار', 'متأخرة', 'متعثرة', 'مكتملة'],
-        datasets: [{ data: [9, 8, 4, 1], backgroundColor: [COLORS.green, COLORS.amber, COLORS.red, COLORS.blue],
-          borderColor: [COLORS.greenPale, COLORS.amberBg, COLORS.redBg, COLORS.bluePale], borderWidth: 3, hoverOffset: 6 }]
-      },
-      options: { ...chartDefaults(), cutout: '65%' }
-    });
-
-    new Chart(document.getElementById('portBudgetBar'), {
-      type: 'bar',
-      data: {
-        labels: ['حكومة إلكترونية', 'بيانات وطنية', 'أمن سيبراني', 'تحول سحابي', 'ذكاء اصطناعي'],
-        datasets: [
-          { label: 'المخطط', data: [245, 200, 210, 200, 125], backgroundColor: 'rgba(93,146,201,0.3)', borderColor: COLORS.blueMid, borderWidth: 1.5, borderRadius: 5, borderSkipped: false },
-          { label: 'الفعلي', data: [198, 120, 95, 148, 69], backgroundColor: [COLORS.green, COLORS.amber, COLORS.red, COLORS.amber, COLORS.amber],
-            borderWidth: 1.5, borderRadius: 5, borderSkipped: false }
-        ]
-      },
-      options: { ...chartDefaults(), scales: { x: axisStyle().x, y: { ...axisStyle().y, ticks: { ...axisStyle().y.ticks, callback: v => v + 'م' } } } }
-    });
-  }
-
-  if (name === 'program') {
-    new Chart(document.getElementById('progBudgetBar'), {
-      type: 'bar',
-      data: {
-        labels: ['بوابة', 'وثائق', 'توقيع', 'مدفوعات', 'تطبيق', 'تكامل'],
-        datasets: [
-          { label: 'المخطط', data: [45, 32, 28, 55, 50, 35], backgroundColor: 'rgba(93,146,201,0.3)', borderColor: COLORS.blueMid, borderWidth: 1.5, borderRadius: 4, borderSkipped: false },
-          { label: 'الفعلي', data: [39, 30, 19, 47, 36, 27], backgroundColor: [COLORS.green,COLORS.green,COLORS.amber,COLORS.green,COLORS.amber,COLORS.green],
-            borderWidth: 1.5, borderRadius: 4, borderSkipped: false }
-        ]
-      },
-      options: { ...chartDefaults(), scales: { x: axisStyle().x, y: { ...axisStyle().y, ticks: { ...axisStyle().y.ticks, callback: v => v + 'م' } } } }
-    });
-  }
-
-  if (name === 'project') {
-    new Chart(document.getElementById('projHealthPie'), {
-      type: 'doughnut',
-      data: {
-        labels: ['مكتملة', 'جارية', 'معلقة'],
-        datasets: [{ data: [62, 26, 12], backgroundColor: [COLORS.green, COLORS.blue, COLORS.amber],
-          borderColor: [COLORS.greenPale, COLORS.bluePale, COLORS.amberBg], borderWidth: 3, hoverOffset: 6 }]
-      },
-      options: { ...chartDefaults(), cutout: '65%' }
-    });
-
-    new Chart(document.getElementById('projEvmLine'), {
-      type: 'line',
-      data: {
-        labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
-        datasets: [
-          { label: 'القيمة المخططة PV', data: [5, 12, 20, 30, 39, 45], borderColor: COLORS.blueMid,
-            backgroundColor: 'rgba(93,146,201,0.1)', fill: true, tension: 0.4, pointRadius: 4, borderWidth: 2 },
-          { label: 'القيمة المكتسبة EV', data: [5, 11, 19, 28, null, null], borderColor: COLORS.green,
-            backgroundColor: 'rgba(48,108,69,0.08)', fill: true, tension: 0.4, pointRadius: 4, borderWidth: 2 },
-          { label: 'التكلفة الفعلية AC', data: [4, 10, 18, 27, null, null], borderColor: COLORS.amber,
-            backgroundColor: 'transparent', tension: 0.4, pointRadius: 4, borderWidth: 2, borderDash: [4,3] }
-        ]
-      },
-      options: {
-        ...chartDefaults(),
-        plugins: { legend: { display: true, position: 'top', labels: { font: { family: 'Cairo', size: 10 }, color: COLORS.muted, boxWidth: 10 } } },
-        scales: { x: axisStyle().x, y: { ...axisStyle().y, ticks: { ...axisStyle().y.ticks, callback: v => v + 'م' } } }
-      }
-    });
-
-    new Chart(document.getElementById('projBudgetDoughnut'), {
-      type: 'doughnut',
-      data: {
-        labels: ['الإنفاق الفعلي', 'الاحتياطي المتبقي'],
-        datasets: [{ data: [39, 6], backgroundColor: [COLORS.green, COLORS.greenPale],
-          borderColor: [COLORS.greenPale, COLORS.border], borderWidth: 2, hoverOffset: 4 }]
-      },
-      options: { ...chartDefaults(), cutout: '70%' }
-    });
-  }
-}
-
-// Init PMO charts on load
-window.addEventListener('DOMContentLoaded', () => {
-  chartsInitialized['pmo'] = true;
-  setTimeout(() => initCharts('pmo'), 100);
-});
+window.addEventListener('DOMContentLoaded',()=>{initialized['pmo']=true;setTimeout(()=>initCharts('pmo'),100);});
 </script>
 </body>
 </html>
